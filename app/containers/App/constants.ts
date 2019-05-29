@@ -7,10 +7,22 @@
  *
  */
 
-enum ActionTypes {
-  LOAD_REPOS = 'boilerplate/App/LOAD_REPOS',
-  LOAD_REPOS_SUCCESS = 'boilerplate/App/LOAD_REPOS_SUCCESS',
-  LOAD_REPOS_ERROR = 'boilerplate/App/LOAD_REPOS_ERROR',
+//Navigation items names and corresponding ids
+export interface INavigationItem {
+  name: string;
+  path: string;
 }
+export const NavigationItems = {
+  dashboard: {
+    name: 'Dashboard',
+    path: '/dashboard',
+  },
+  match: { name: 'Match', path: '/match' },
+  stadium: { name: 'Stadium', path: '/stadium' },
+  team: { name: 'Team', path: '/team' },
+};
 
-export default ActionTypes;
+//Action Types
+export enum ActionTypes {
+  SET_ACTIVE_NAV_ITEM = 'app/navigation/SET_ACTIVE_NAV_ITEM',
+}

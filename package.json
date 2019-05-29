@@ -73,6 +73,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "7.4.3",
+    "@blueprintjs/core": "^3.15.1",
     "chalk": "^2.4.2",
     "compression": "1.7.4",
     "connected-react-router": "6.4.0",
@@ -184,6 +185,7 @@
     "pre-commit": "1.2.2",
     "prettier": "1.17.0",
     "react-app-polyfill": "0.2.2",
+    "react-svg-loader": "^3.0.1",
     "react-test-renderer": "16.8.6",
     "react-testing-library": "6.1.2",
     "rimraf": "2.6.3",

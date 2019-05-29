@@ -10,11 +10,12 @@ export interface IThemeInterface {
 
 export const theme = {
   default: {
-    primary: '#fff',
+    primary: '#007bff',
     componentBackground: '#fff',
-    componentBackgroundSecondary: '#fff',
+    componentBackgroundSecondary: '#fbfbfb',
   },
 };
+
 const {
   default: styled,
   css,

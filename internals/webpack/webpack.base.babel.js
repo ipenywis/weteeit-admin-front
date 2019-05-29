@@ -51,7 +51,7 @@ module.exports = options => ({
         use: 'file-loader',
       },
       {
-        test: /\.svg$/,
+        test: /^(?!.*\.inline\.svg$).*\.svg$/,
         use: [
           {
             loader: 'svg-url-loader',
@@ -62,6 +62,10 @@ module.exports = options => ({
             },
           },
         ],
+      },
+      {
+        test: /\.inline.svg$/,
+        loader: 'react-svg-loader',
       },
       {
         test: /\.(jpg|png|gif)$/,

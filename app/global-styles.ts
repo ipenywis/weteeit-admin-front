@@ -1,12 +1,20 @@
 import { createGlobalStyle } from 'styles/styled-components';
 
 const GlobalStyle = createGlobalStyle`
+
+  * {
+    box-sizing: border-box;
+  }
+
   html,
   body {
     height: 100%;
     width: 100%;
-    line-height: 1.5;
+    padding: 0;
+    margin: 0;
   }
+
+  @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 
   body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -18,14 +26,19 @@ const GlobalStyle = createGlobalStyle`
 
   #app {
     background-color: #fafafa;
-    min-height: 100%;
-    min-width: 100%;
+    height: 100%;
+    width: 100%;
   }
 
   p,
   label {
     font-family: Georgia, Times, 'Times New Roman', serif;
     line-height: 1.5em;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
   }
 `;
 

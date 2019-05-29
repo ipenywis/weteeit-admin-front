@@ -30,8 +30,12 @@ export function LanguageProvider(props: ILanguageProviderProps) {
     </IntlProvider>
   );
 }
-const mapStateToProps = createSelector(makeSelectLocale(), locale => ({
-  locale: locale,
-}));
+const mapStateToProps = createSelector(
+  makeSelectLocale(),
+  locale => {
+    console.log('Language Provider');
+    return { locale: locale };
+  },
+);
 
 export default connect(mapStateToProps)(LanguageProvider);

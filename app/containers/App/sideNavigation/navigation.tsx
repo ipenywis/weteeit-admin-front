@@ -82,9 +82,8 @@ function SideNavigation(props: INavigationProps) {
         {navItemsKeys.map((item, idx) => {
           const navItem: INavigationItem = NavigationItems[item];
           return (
-            <Link to={navItem.path}>
+            <Link to={navItem.path} key={`${item}-${idx}`}>
               <NavItem
-                key={`${item}-${idx}`}
                 active={activeNavItem === item}
                 onClick={() => onItemClick(item)}
               >

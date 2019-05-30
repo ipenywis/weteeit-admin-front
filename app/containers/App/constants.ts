@@ -25,4 +25,6 @@ export const NavigationItems = {
 //Action Types
 export enum ActionTypes {
   SET_ACTIVE_NAV_ITEM = 'app/navigation/SET_ACTIVE_NAV_ITEM',
+  OPEN_SEARCH_BAR = 'app/navbar/OPEN_SEARCH_BAR',
+  CLOSE_SEARCH_BAR = 'app/navbar/CLOSE_SEARCH_BAR',
 }

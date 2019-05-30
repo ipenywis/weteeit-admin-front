@@ -14,10 +14,11 @@ import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 import GlobalStyle from '../../global-styles';
+import BlueprintCustomStyle from '../../styles/custom-bp3-styles';
 import styled from 'styled-components';
 import SideNavigation from './sideNavigation/navigation';
 import { VerticalWrapper } from 'components/verticalWrapper';
-import { NavBar } from './navbar';
+import NavBar from './navbar';
 import { connect } from 'react-redux';
 
 /*const MainWrapper = styled.div`
@@ -38,6 +39,7 @@ const MainContainer = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
+  padding: 20px;
 `;
 
 function App() {
@@ -56,12 +58,12 @@ function App() {
         </AppContainer>
       </Switch>
       <GlobalStyle />
+      <BlueprintCustomStyle />
     </div>
   );
 }
 
 const mapStateToProps = state => {
-  console.log('App: ', state);
   return state;
 };
 

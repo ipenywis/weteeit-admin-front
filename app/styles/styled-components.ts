@@ -13,6 +13,10 @@ export const theme = {
     primary: '#007bff',
     componentBackground: '#fff',
     componentBackgroundSecondary: '#fbfbfb',
+    light: '#bdc3c7',
+    semiLight: '#adadad',
+    semiDark: '#828181',
+    dark: '#343b3c',
   },
 };
 

@@ -3,6 +3,7 @@ import { ApplicationRootState } from 'types';
 
 const selectRoute = (state: ApplicationRootState) => state.router;
 const selectNavigation = (state: ApplicationRootState) => state.navigation;
+const selectNavBar = (state: ApplicationRootState) => state.navBar;
 
 const makeSelectLocation = () =>
   createSelector(
@@ -16,4 +17,10 @@ const makeNavActiveItem = () =>
     navigation => navigation.activeNavItem,
   );
 
-export { makeSelectLocation, makeNavActiveItem };
+const makeIsSearchBarOpen = () =>
+  createSelector(
+    selectNavBar,
+    navBar => navBar.isSearchBarOpen,
+  );
+
+export { makeSelectLocation, makeNavActiveItem, makeIsSearchBarOpen };

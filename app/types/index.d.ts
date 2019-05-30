@@ -1,7 +1,7 @@
 import { Reducer, Store } from 'redux';
 import { RouterState } from 'connected-react-router';
 import { ILanguageProviderProps } from 'containers/LanguageProvider';
-import { INavigationState } from 'containers/App/type';
+import { INavigationState, INavBarState } from 'containers/App/type';
 
 export interface LifeStore extends Store {
   injectedReducers: any;
@@ -28,6 +28,7 @@ export interface ApplicationRootState {
   readonly router: RouterState;
   readonly language: ILanguageProviderProps;
   readonly navigation: INavigationState;
+  readonly navBar: INavBarState;
 }
 
 export interface IAction {

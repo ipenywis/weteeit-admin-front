@@ -4,6 +4,7 @@ import styled from 'styled-components';
 interface IVerticalWrapperProps {
   width?: string;
   height?: string;
+  style?: React.CSSProperties;
   children?: any[];
 }
 

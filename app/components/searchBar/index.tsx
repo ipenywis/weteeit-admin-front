@@ -20,8 +20,10 @@ const CollapsedContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
-  padding: 0 15px;
+  width: 100%;
   cursor: pointer;
+  position: relative;
+
   svg {
     transition: all 200ms ease-in-out;
     color: ${theme.default.light};
@@ -29,9 +31,37 @@ const CollapsedContainer = styled.div`
 
   &:hover {
     svg {
+      transition: all 200ms ease-in-out;
       color: ${theme.default.primary};
     }
   }
+`;
+
+const CollapsedSearchInput = styled.input`
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0 36px;
+  outline: none;
+  font-size: 10px;
+  font-weight: lighter;
+  font-family: 'Open Sans', sans-serif;
+  box-shadow: inset 0px 0px 16px 0px rgba(111, 111, 111, 0.05);
+  box-sizing: border-box;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const CollapsedSearchIcon = styled.div`
+  position: absolute;
+  top: 0;
+  left: 3px;
+  width: 30px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 //Container for when the search bar is active
@@ -153,8 +183,6 @@ export default class SearchBar extends React.Component<ISearchBarProps> {
   }
 
   componentDidMount() {
-    //Focus Input on mount
-    this.searchInput && (this.searchInput as HTMLInputElement).focus();
     //Remove DOM listener
     document.removeEventListener('keyup', this.closeSearch.bind(this));
   }
@@ -164,40 +192,54 @@ export default class SearchBar extends React.Component<ISearchBarProps> {
       this.props.onCloseClick && this.props.onCloseClick();
   }
 
+  openSearch() {
+    //Focus Input after a delay
+    setTimeout(
+      () => this.searchInput && (this.searchInput as HTMLInputElement).focus(),
+      100,
+    );
+    this.props.onOpenClick && this.props.onOpenClick();
+  }
+
   render() {
     const { isOpen } = this.props;
 
-    //Search bar is collapsed
-    if (!isOpen)
-      return (
-        <CollapsedContainer onClick={this.props.onOpenClick}>
-          <FontAwesomeIcon icon={faSearch} size="sm" />
-        </CollapsedContainer>
-      );
-    else {
-      const search = (
-        <ActiveContainer>
-          <SearchWrapper>
-            <SearchContainer>
-              <SearchIconContainer>
-                <FontAwesomeIcon icon={faSearch} size="xs" />
-              </SearchIconContainer>
-              <SearchInput
-                placeholder="Type to Search..."
-                ref={ref => (this.searchInput = ref)}
-              />
-              <CloseIconContainer onClick={this.props.onCloseClick}>
-                <FontAwesomeIcon icon={faTimes} size="sm" />
-              </CloseIconContainer>
-            </SearchContainer>
-            <SearchResultContainer />
-          </SearchWrapper>
-        </ActiveContainer>
-      );
+    //Search Popup
+    const search = (
+      <ActiveContainer>
+        <SearchWrapper>
+          <SearchContainer>
+            <SearchIconContainer>
+              <FontAwesomeIcon icon={faSearch} size="xs" />
+            </SearchIconContainer>
+            <SearchInput
+              placeholder="Type to Search..."
+              ref={ref => (this.searchInput = ref)}
+            />
+            <CloseIconContainer onClick={this.props.onCloseClick}>
+              <FontAwesomeIcon icon={faTimes} size="sm" />
+            </CloseIconContainer>
+          </SearchContainer>
+          <SearchResultContainer />
+        </SearchWrapper>
+      </ActiveContainer>
+    );
 
-      return ReactDOM.createPortal(search, document.getElementById(
-        this.renderContainerId,
-      ) as Element);
-    }
+    //Search bar is collapsed
+    return (
+      <CollapsedContainer>
+        <CollapsedSearchIcon>
+          <FontAwesomeIcon icon={faSearch} size="xs" />
+        </CollapsedSearchIcon>
+        <CollapsedSearchInput
+          placeholder="Search for Matches, Teams..."
+          onClick={this.openSearch.bind(this)}
+        />
+        {isOpen &&
+          ReactDOM.createPortal(search, document.getElementById(
+            this.renderContainerId,
+          ) as Element)}
+      </CollapsedContainer>
+    );
   }
 }

@@ -16,7 +16,7 @@ import Wrapper from 'components/wrapper';
 export interface IProfileBellProps {}
 
 const ProfileBellContainer = styled.div`
-  min-width: 8em;
+  min-width: 11em;
   height: 100%;
   top: 0;
   right: 0;
@@ -32,12 +32,11 @@ const ProfileBellContainer = styled.div`
 `;
 
 const ProfileImage = styled.div`
-  width: 28px;
-  height: 28px;
+  width: 29px;
+  height: 29px;
   border-radius: 50%;
-  padding: 1px;
   background-color: #fff;
-  box-shadow: 0px 0px 12px 1px rgba(15, 15, 15, 0.2);
+  box-shadow: 0px 0px 12px 1px rgba(15, 15, 15, 0.1);
   cursor: pointer;
   transition: all 250ms ease-in-out;
 

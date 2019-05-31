@@ -22,11 +22,11 @@ const NavBarContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  height: 3.3em;
+  height: 3.7em;
   box-shadow: 0px 1px 12px 1px rgba(15, 15, 15, 0.12);
   z-index: 10;
   background-color: #fff;
-  padding: 0 15px;
+  padding: 0 15px 0 0;
 `;
 
 const CustomDivider = styled(Divider)`

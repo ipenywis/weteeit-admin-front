@@ -23,7 +23,6 @@ const ProfileBellContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 10px;
 
   div,
   svg {
@@ -72,14 +71,19 @@ const ArrowIcon = styled.div`
 `;
 
 const CustomPopover = styled(Popover as any)`
+  width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .bp3-popover-target {
+    width: 100%;
+  }
 `;
 
 const CustomMenu = styled(Menu)`
-  min-width: 120px;
+  min-width: 150px;
 `;
 
 const CustomMenuItem = styled(MenuItem)`

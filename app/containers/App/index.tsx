@@ -20,6 +20,7 @@ import SideNavigation from './sideNavigation/navigation';
 import { VerticalWrapper } from 'components/verticalWrapper';
 import NavBar from './navbar';
 import { connect } from 'react-redux';
+import { theme } from 'styles/styled-components';
 
 /*const MainWrapper = styled.div`
   width: 100%;
@@ -40,6 +41,7 @@ const MainContainer = styled.div`
   height: 100%;
   width: 100%;
   padding: 20px;
+  background-color: ${theme.default.mainBackground};
 `;
 
 function App() {

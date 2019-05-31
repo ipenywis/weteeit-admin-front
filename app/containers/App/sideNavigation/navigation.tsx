@@ -22,7 +22,7 @@ const NavigationContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  box-shadow: 0px 0px 25px 1px rgba(15, 15, 15, 0.12);
+  box-shadow: 0px 0px 6px 1px rgba(15, 15, 15, 0.12);
   z-index: 20;
   background-color: #fff;
 `;

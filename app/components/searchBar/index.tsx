@@ -192,7 +192,8 @@ export default class SearchBar extends React.Component<ISearchBarProps> {
       this.props.onCloseClick && this.props.onCloseClick();
   }
 
-  openSearch() {
+  openSearch(e: React.MouseEvent) {
+    e.preventDefault();
     //Focus Input after a delay
     setTimeout(
       () => this.searchInput && (this.searchInput as HTMLInputElement).focus(),

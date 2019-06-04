@@ -78,7 +78,6 @@ const NavItem = styled.div`
 const SubMenu = styled.div`
   position: absolute;
   min-width: 130px;
-  min-height: 5em;
   top: 0;
   right: -9.5em;
   background-color: #fff;
@@ -111,13 +110,10 @@ function SideNavigation(props: INavigationProps) {
     if (navItem.submenu)
       subMenu = renderSubMenu(navItem.submenu as INavigationItem[]);
     const isSubMenuOpen = navItem.submenu && activeSubMenu === item;
-    let timer: number;
 
     //Mouse Enter
     const onNavItemHover = () => {
-      console.log('Container Enter');
       //Clear Timeout if started
-      if (timer) clearTimeout(timer);
       if (renderSubMenuOnHover && navItemRef)
         navItemRef &&
           (navItemRef as HTMLDivElement).addEventListener('mouseover', () => {
@@ -126,19 +122,17 @@ function SideNavigation(props: INavigationProps) {
     };
 
     return (
-      <Wrapper height="auto" width="100%">
-        <CustomLink to={path} key={key}>
-          <NavItem
-            onMouseEnter={onNavItemHover}
-            active={isActive}
-            onClick={() => onItemClick(item)}
-            ref={ref => (navItemRef = ref)}
-          >
-            <div>{navItem.name}</div>
-          </NavItem>
-          {isSubMenuOpen && subMenu}
-        </CustomLink>
-      </Wrapper>
+      <CustomLink to={path} key={key}>
+        <NavItem
+          onMouseEnter={onNavItemHover}
+          active={isActive}
+          onClick={() => onItemClick(item)}
+          ref={ref => (navItemRef = ref)}
+        >
+          <div>{navItem.name}</div>
+        </NavItem>
+        {isSubMenuOpen && subMenu}
+      </CustomLink>
     );
   };
 
@@ -166,7 +160,7 @@ function SideNavigation(props: INavigationProps) {
         {navItemsKeys.map((item, idx) => {
           const navItem: INavigationItem = NavigationItems[item];
           return (
-            <Wrapper height="auto" onMouseLeave={onMouseLeave}>
+            <Wrapper height="auto" data-me="true" onMouseLeave={onMouseLeave}>
               {renderNavItem(navItem, item, `${item}-${idx}`)}
             </Wrapper>
           );

@@ -18,7 +18,16 @@ export const NavigationItems = {
     name: 'Dashboard',
     path: '/dashboard',
   },
-  match: { name: 'Match', path: '/match' },
+  match: {
+    name: 'Match',
+    path: '/match',
+    submenu: {
+      newMatch: {
+        name: 'New Match',
+        path: '/match/new',
+      },
+    },
+  },
   stadium: { name: 'Stadium', path: '/stadium' },
   team: {
     name: 'Team',
@@ -29,9 +38,9 @@ export const NavigationItems = {
         path: '/team/new',
       },
       config: {
-        name: "configuration",
-        path: "/team/config"
-      }
+        name: 'configuration',
+        path: '/team/config',
+      },
     },
   },
 };

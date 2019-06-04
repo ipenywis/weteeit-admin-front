@@ -9,8 +9,9 @@
 
 //Navigation items names and corresponding ids
 export interface INavigationItem {
-  name: string;
-  path: string;
+  [name: string]: any;
+  path?: string;
+  submenu?: INavigationItem[];
 }
 export const NavigationItems = {
   dashboard: {
@@ -19,7 +20,20 @@ export const NavigationItems = {
   },
   match: { name: 'Match', path: '/match' },
   stadium: { name: 'Stadium', path: '/stadium' },
-  team: { name: 'Team', path: '/team' },
+  team: {
+    name: 'Team',
+    path: '/team',
+    submenu: {
+      newTeam: {
+        name: 'New Team',
+        path: '/team/new',
+      },
+      config: {
+        name: "configuration",
+        path: "/team/config"
+      }
+    },
+  },
 };
 
 //Action Types
@@ -27,4 +41,5 @@ export enum ActionTypes {
   SET_ACTIVE_NAV_ITEM = 'app/navigation/SET_ACTIVE_NAV_ITEM',
   OPEN_SEARCH_BAR = 'app/navbar/OPEN_SEARCH_BAR',
   CLOSE_SEARCH_BAR = 'app/navbar/CLOSE_SEARCH_BAR',
+  SET_ACTIVE_SUBMENU = 'app/navigation/SET_ACTIVE_SUBMENU',
 }

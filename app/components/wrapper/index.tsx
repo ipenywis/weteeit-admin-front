@@ -2,12 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 export interface IWrapperProps {
+  key?: string;
   width?: string;
   height?: string;
   useFlexBox?: boolean;
   vertical?: boolean;
   centerVertically?: boolean;
   centerHorizontally?: boolean;
+  onMouseEnter?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseLeave?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const WrapperContainer = styled.div`
@@ -33,6 +36,7 @@ export default class Wrapper extends React.Component<IWrapperProps> {
     return (
       <WrapperContainer {...this.props}>
         {React.Children.map(this.props.children, (child, idx) => {
+          if (!child) return null;
           return React.cloneElement(child as React.ReactElement, { key: idx });
         })}
       </WrapperContainer>

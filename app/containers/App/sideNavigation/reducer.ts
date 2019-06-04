@@ -5,6 +5,7 @@ import { ActionTypes } from '../constants';
 
 export const initialState: INavigationState = {
   activeNavItem: NavigationItems.dashboard.name,
+  activeSubMenu: '',
 };
 
 function NavigationReducer(
@@ -13,7 +14,9 @@ function NavigationReducer(
 ) {
   switch (action.type) {
     case ActionTypes.SET_ACTIVE_NAV_ITEM:
-      return { activeNavItem: action.payload };
+      return { ...state, activeNavItem: action.payload };
+    case ActionTypes.SET_ACTIVE_SUBMENU:
+      return { ...state, activeSubMenu: action.payload };
     default:
       return state;
   }

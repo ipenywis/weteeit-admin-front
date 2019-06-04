@@ -23,4 +23,15 @@ const makeIsSearchBarOpen = () =>
     navBar => navBar.isSearchBarOpen,
   );
 
-export { makeSelectLocation, makeNavActiveItem, makeIsSearchBarOpen };
+const makeActiveSubMenu = () =>
+  createSelector(
+    selectNavigation,
+    navigation => navigation.activeSubMenu,
+  );
+
+export {
+  makeSelectLocation,
+  makeNavActiveItem,
+  makeIsSearchBarOpen,
+  makeActiveSubMenu,
+};

@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'styled-components';
 const Blueprint3CustomStyles = createGlobalStyle`
   /* Popover */
   .bp3-transition-container{
-    margin-top: 10px !important;
+    margin-top: 14px !important;
   }
 `;
 

@@ -10,16 +10,18 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+///import { FormattedMessage } from 'react-intl';
+//import messages from './messages';
 import { connect } from 'react-redux';
+import PageContainer from 'components/pageContainer';
+import PageHeader from 'components/pageHeader';
 
 /* eslint-disable react/prefer-stateless-function */
-function HomePage() {
+function DashboardPage() {
   return (
-    <h1>
-      <FormattedMessage {...messages.header} />
-    </h1>
+    <PageContainer>
+      <PageHeader header="Dashboard" subHeader="Quick Overview" />
+    </PageContainer>
   );
 }
 
@@ -30,4 +32,4 @@ const mapStateToProps = (state: any) => {
 export default connect(
   mapStateToProps,
   null,
-)(HomePage);
+)(DashboardPage);

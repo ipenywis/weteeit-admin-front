@@ -17,7 +17,9 @@ export const theme = {
     light: '#bdc3c7',
     semiLight: '#adadad',
     semiDark: '#828181',
+    darkText: '#3d5170',
     dark: '#343b3c',
+    muted: '#818ea3',
   },
 };
 

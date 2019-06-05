@@ -23,7 +23,7 @@ const NavBarContainer = styled.div`
   justify-content: flex-end;
   width: 100%;
   height: 4em;
-  box-shadow: 0px 1px 12px 1px rgba(15, 15, 15, 0.12);
+  box-shadow: 0px 0px 5px 0px rgba(15, 15, 15, 0.12);
   z-index: 10;
   background-color: #fff;
   padding: 0 15px 0 0;

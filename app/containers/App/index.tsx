@@ -10,7 +10,6 @@
 import * as React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import HomePage from 'containers/DashboardPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 import GlobalStyle from '../../global-styles';
@@ -21,6 +20,7 @@ import { VerticalWrapper } from 'components/verticalWrapper';
 import NavBar from './navbar';
 import { connect } from 'react-redux';
 import { theme } from 'styles/styled-components';
+import DashboardPage from 'containers/DashboardPage';
 
 /*const MainWrapper = styled.div`
   width: 100%;
@@ -40,25 +40,25 @@ const MainContainer = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
-  padding: 20px;
   background-color: ${theme.default.mainBackground};
 `;
 
 function App() {
   return (
     <div style={{ width: '100%', height: '100%', padding: 0, margin: 0 }}>
-      <Switch>
-        <AppContainer>
-          <SideNavigation />
-          <VerticalWrapper width="100%" height="100%">
-            <NavBar />
-            <MainContainer>
-              <Route exact path="/" component={HomePage} />
+      <AppContainer>
+        <SideNavigation />
+        <VerticalWrapper width="100%" height="100%">
+          <NavBar />
+          <MainContainer>
+            <Switch>
+              <Route exact path="/" component={DashboardPage} />
+              <Route exact path="/dashboard" component={DashboardPage} />
               <Route component={NotFoundPage} />
-            </MainContainer>
-          </VerticalWrapper>
-        </AppContainer>
-      </Switch>
+            </Switch>
+          </MainContainer>
+        </VerticalWrapper>
+      </AppContainer>
       <GlobalStyle />
       <BlueprintCustomStyle />
     </div>

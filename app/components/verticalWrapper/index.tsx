@@ -16,6 +16,5 @@ const VerticalContainer = styled.div`
 `;
 
 export function VerticalWrapper(props: IVerticalWrapperProps) {
-  console.log('Width: ', props.width ? props.width : 'auto');
   return <VerticalContainer {...props}>{props.children}</VerticalContainer>;
 }

@@ -9,6 +9,7 @@ import { createSelector } from 'reselect';
 import { makeIsSearchBarOpen } from '../selectors';
 import ProfileBell from 'components/profileBell';
 import { Divider } from '@blueprintjs/core';
+import { push } from 'connected-react-router';
 
 export interface INavBarProps {
   isSearchBarOpen?: boolean;
@@ -16,6 +17,7 @@ export interface INavBarProps {
 interface IDispatchProps {
   openSearchBar: () => void;
   closeSearchBar: () => void;
+  pushRoute: (path: string) => void;
 }
 
 const NavBarContainer = styled.div`
@@ -33,18 +35,18 @@ const CustomDivider = styled(Divider)`
   margin: 0;
 `;
 
-function NavBar(props: INavBarProps | IDispatchProps) {
+function NavBar(props: INavBarProps & IDispatchProps) {
   const { isSearchBarOpen } = props as INavBarProps;
 
   return (
     <NavBarContainer>
       <SearchBar
         isOpen={isSearchBarOpen as boolean}
-        onOpenClick={(props as IDispatchProps).openSearchBar}
-        onCloseClick={(props as IDispatchProps).closeSearchBar}
+        onOpenClick={props.openSearchBar}
+        onCloseClick={props.closeSearchBar}
       />
       <CustomDivider />
-      <ProfileBell />
+      <ProfileBell pushRoute={props.pushRoute} />
     </NavBarContainer>
   );
 }
@@ -62,6 +64,9 @@ const mapDispatchToProps = (dispatch: Dispatch): IDispatchProps => ({
   },
   closeSearchBar: () => {
     dispatch(closeSearchBar());
+  },
+  pushRoute: (path: string) => {
+    dispatch(push(path));
   },
 });
 

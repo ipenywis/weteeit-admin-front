@@ -12,8 +12,7 @@ import {
   MenuDivider,
 } from '@blueprintjs/core';
 import Wrapper from 'components/wrapper';
-
-export interface IProfileBellProps {}
+import { ROUTES } from 'routes';
 
 const ProfileBellContainer = styled.div`
   min-width: 11em;
@@ -91,11 +90,25 @@ const CustomMenuItem = styled(MenuItem)`
   padding: 2px 5px;
 `;
 
+export interface IProfileBellProps {
+  pushRoute: (path: string) => void;
+}
+
 export default class ProfileBell extends React.Component<IProfileBellProps> {
+  myProfileRef: typeof CustomMenuItem | null = null;
+
+  hideMenu() {
+    (this.myProfileRef as any).click();
+  }
+
   renderProfileDropdown() {
+    const { pushRoute } = this.props;
     return (
       <CustomMenu large={false}>
-        <CustomMenuItem text="Edit Info" />
+        <CustomMenuItem
+          text="My Profile"
+          onClick={() => pushRoute(ROUTES.profile)}
+        />
         <MenuDivider />
         <CustomMenuItem text="Logout" intent={Intent.DANGER} />
       </CustomMenu>

@@ -21,6 +21,8 @@ import NavBar from './navbar';
 import { connect } from 'react-redux';
 import { theme } from 'styles/styled-components';
 import DashboardPage from 'containers/DashboardPage';
+import ProfilePage from 'containers/ProfilePage';
+import { ROUTES } from '../../routes';
 
 /*const MainWrapper = styled.div`
   width: 100%;
@@ -52,8 +54,9 @@ function App() {
           <NavBar />
           <MainContainer>
             <Switch>
-              <Route exact path="/" component={DashboardPage} />
-              <Route exact path="/dashboard" component={DashboardPage} />
+              <Route exact path={ROUTES.dashboard} component={DashboardPage} />
+              <Route exact path={ROUTES.dashboard} component={DashboardPage} />
+              <Route exact path={ROUTES.profile} component={ProfilePage} />
               <Route component={NotFoundPage} />
             </Switch>
           </MainContainer>

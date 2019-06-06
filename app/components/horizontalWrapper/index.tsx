@@ -4,7 +4,8 @@ import styled from 'styled-components';
 interface IHorizontalWrapperProps {
   width?: string;
   height?: string;
-  children?: any[];
+  spaceBetween?: boolean;
+  children?: any;
 }
 
 const HorizontalContainer = styled.div`
@@ -13,8 +14,10 @@ const HorizontalContainer = styled.div`
   width: ${({ width }: IHorizontalWrapperProps) => (width ? width : 'auto')};
   height: ${({ height }: IHorizontalWrapperProps) =>
     height ? height : 'auto'};
+  justify-content: ${props => props.spaceBetween && 'space-between'};
+  margin: 2em 0;
 `;
 
 export function HorizontalWrapper(props: IHorizontalWrapperProps) {
-  return <HorizontalContainer>{props.children}</HorizontalContainer>;
+  return <HorizontalContainer {...props}>{props.children}</HorizontalContainer>;
 }

@@ -9,6 +9,7 @@ import history from 'utils/history';
 import languageProviderReducer from 'containers/LanguageProvider/reducer';
 import NavigationReducer from 'containers/App/sideNavigation/reducer';
 import NavBarReducer from 'containers/App/navbar/reducer';
+import FinalFormReducer from './finalFormDuck';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -19,6 +20,7 @@ export default function createReducer(injectedReducers = {}) {
     router: connectRouter(history),
     navigation: NavigationReducer,
     navBar: NavBarReducer,
+    finalForm: FinalFormReducer,
     ...injectedReducers,
   });
 

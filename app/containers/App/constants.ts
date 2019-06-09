@@ -13,10 +13,12 @@ export interface INavigationItem {
   path?: string;
   submenu?: INavigationItem[];
 }
+
+//Side Navigation Routes
 export const NavigationItems = {
   dashboard: {
     name: 'Dashboard',
-    path: '/dashboard',
+    path: '/',
   },
   match: {
     name: 'Match',

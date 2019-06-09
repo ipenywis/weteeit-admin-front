@@ -55,7 +55,6 @@ function App() {
           <MainContainer>
             <Switch>
               <Route exact path={ROUTES.dashboard} component={DashboardPage} />
-              <Route exact path={ROUTES.dashboard} component={DashboardPage} />
               <Route exact path={ROUTES.profile} component={ProfilePage} />
               <Route component={NotFoundPage} />
             </Switch>

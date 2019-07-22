@@ -20,7 +20,7 @@ export default function ProfilePage() {
       <PageHeader header="Profile" subHeader="Edit Info" />
       <HorizontalWrapper>
         <PersonalInfo {...fakePersonalInfo} />
-        <AccountDetails password="*********" />
+        <AccountDetails password="123456798" />
       </HorizontalWrapper>
     </PageContainer>
   );

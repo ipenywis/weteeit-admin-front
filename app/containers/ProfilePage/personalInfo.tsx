@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Form } from 'components/form';
 import { Card } from 'components/card';
-import { FormGroup, Intent } from '@blueprintjs/core';
+import { FormGroup, Intent, Button } from '@blueprintjs/core';
 import { DateInput, IDateFormatProps } from '@blueprintjs/datetime';
 import '../../../node_modules/@blueprintjs/datetime/lib/css/blueprint-datetime.css';
 import { IPersonalInfo } from './type';
@@ -26,23 +26,30 @@ function PersonalInfo(props: IPersonalInfoProps) {
   return (
     <Card header="Personal Info">
       <Form onSubmit={onSubmit}>
-        {() => (
+        {({ form, handleSubmit }) => (
           <VerticalWrapper>
             <FormGroup label="Username" intent={Intent.PRIMARY}>
               <InputGroup name="username" value={username} />
             </FormGroup>
             <FormGroup label="Full Name" intent={Intent.PRIMARY}>
-              <InputGroup name="email" value={fullName} small={true} />
+              <InputGroup name="email" value={fullName} />
             </FormGroup>
             <FormGroup label="Email" intent={Intent.PRIMARY}>
-              <InputGroup name="email" value={email} small={true} />
+              <InputGroup name="email" value={email} />
             </FormGroup>
             <FormGroup label="Phone Number" intent={Intent.PRIMARY}>
-              <InputGroup name="phoneNumber" value={phoneNumber} small={true} />
+              <InputGroup name="phoneNumber" value={phoneNumber} />
             </FormGroup>
             <FormGroup label="Birth Date" intent={Intent.PRIMARY}>
               <DateInput {...jsDateFormatter} defaultValue={birthDate} />
             </FormGroup>
+            <Button
+              icon="confirm"
+              intent={Intent.PRIMARY}
+              onClick={handleSubmit}
+            >
+              Update
+            </Button>
           </VerticalWrapper>
         )}
       </Form>

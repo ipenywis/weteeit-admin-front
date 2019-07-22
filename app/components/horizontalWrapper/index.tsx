@@ -16,6 +16,7 @@ const HorizontalContainer = styled.div`
     height ? height : 'auto'};
   justify-content: ${props => props.spaceBetween && 'space-between'};
   margin: 2em 0;
+  flex-wrap: wrap;
 `;
 
 export function HorizontalWrapper(props: IHorizontalWrapperProps) {

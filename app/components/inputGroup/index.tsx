@@ -14,9 +14,7 @@ type PropsType = IInputGroupProps &
   FieldProps<HTMLInputElement>;
 
 function InputGroup(props: PropsType) {
-  const primitiveInput = (
-    <BInputGroup small={true}>{props.children}</BInputGroup>
-  );
+  const primitiveInput = <BInputGroup>{props.children}</BInputGroup>;
 
   if (props.useNormalForm)
     return (

@@ -23,6 +23,7 @@ import { theme } from 'styles/styled-components';
 import DashboardPage from 'containers/DashboardPage';
 import ProfilePage from 'containers/ProfilePage';
 import { ROUTES } from '../../routes';
+import TeamPage from 'containers/TeamPage';
 
 /*const MainWrapper = styled.div`
   width: 100%;
@@ -56,6 +57,7 @@ function App() {
             <Switch>
               <Route exact path={ROUTES.dashboard} component={DashboardPage} />
               <Route exact path={ROUTES.profile} component={ProfilePage} />
+              <Route exact path={ROUTES.teamPage} component={TeamPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </MainContainer>

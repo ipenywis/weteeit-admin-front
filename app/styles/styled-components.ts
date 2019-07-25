@@ -20,6 +20,7 @@ export const theme = {
     darkText: '#3d5170',
     dark: '#343b3c',
     muted: '#818ea3',
+    itemBackground: '#f7f7f7',
   },
 };
 

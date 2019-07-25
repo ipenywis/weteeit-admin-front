@@ -15,7 +15,7 @@ export default function AccountDetails(props: IAccountDetailsProps) {
   const onSubmit = () => {};
 
   return (
-    <Card header="Account Settings">
+    <Card header="Account Settings" >
       <Form onSubmit={onSubmit}>
         {({ form, handleSubmit }) => {
           return (
@@ -46,12 +46,3 @@ export default function AccountDetails(props: IAccountDetailsProps) {
     </Card>
   );
 }
-
-/*<Form onSubmit={props.handleSubmit}>
-            <FormGroup label="Username" intent={Intent.PRIMARY}>
-              <InputGroup small={true} />
-            </FormGroup>
-            <FormGroup label="Password" intent={Intent.WARNING}>
-              <InputGroup type="password" value={password} small={true} />
-            </FormGroup>
-        </Form>*/

@@ -2,6 +2,7 @@ import { Reducer, Store } from 'redux';
 import { RouterState } from 'connected-react-router';
 import { ILanguageProviderProps } from 'containers/LanguageProvider';
 import { INavigationState, INavBarState } from 'containers/App/type';
+import { ITeamPageState } from 'containers/TeamPage/type';
 
 export interface LifeStore extends Store {
   injectedReducers: any;
@@ -29,6 +30,7 @@ export interface ApplicationRootState {
   readonly language: ILanguageProviderProps;
   readonly navigation: INavigationState;
   readonly navBar: INavBarState;
+  readonly teamPage: ITeamPageState;
 }
 
 export interface IAction {

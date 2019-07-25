@@ -34,16 +34,6 @@ export const NavigationItems = {
   team: {
     name: 'Team',
     path: '/team',
-    submenu: {
-      newTeam: {
-        name: 'New Team',
-        path: '/team/new',
-      },
-      config: {
-        name: 'configuration',
-        path: '/team/config',
-      },
-    },
   },
 };
 

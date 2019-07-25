@@ -7,6 +7,7 @@ import { FieldProps, Field } from 'react-final-form';
 
 export interface IInputGroupProps {
   useNormalForm?: boolean;
+  initialValue?: FieldProps<HTMLInputElement>['initialValue'];
 }
 
 type PropsType = IInputGroupProps &
@@ -18,7 +19,7 @@ function InputGroup(props: PropsType) {
 
   if (props.useNormalForm)
     return (
-      <Field name={props.name}>
+      <Field name={props.name} initialValue={props.initialValue}>
         {({ input }) =>
           React.cloneElement(primitiveInput, { ...input, ...props })
         }

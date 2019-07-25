@@ -7,10 +7,16 @@ import {
 } from '@blueprintjs/core';
 import { theme } from 'styles/styled-components';
 
+interface ICardProps extends IBCardProps {
+  header?: string;
+  large?: boolean;
+  standalone?: boolean;
+}
+
 const CardContainer = styled(BCard)`
   font-family: 'Open Sans', sans-serif;
-  margin-right: 4em;
-  min-width: 12em;
+  margin-right: ${(props: ICardProps) => !props.standalone && '4em'};
+  min-width: ${(props: ICardProps) => (props.large ? '20em' : '14em')};
 `;
 
 const CardHeader = styled.div`
@@ -19,10 +25,6 @@ const CardHeader = styled.div`
   margin-bottom: 1em;
   font-weight: 500;
 `;
-
-interface ICardProps extends IBCardProps {
-  header?: string;
-}
 
 export class Card extends React.Component<ICardProps> {
   static defaultProps = {

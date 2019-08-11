@@ -24,6 +24,14 @@ import DashboardPage from 'containers/DashboardPage';
 import ProfilePage from 'containers/ProfilePage';
 import { ROUTES } from '../../routes';
 import TeamPage from 'containers/TeamPage';
+import MatchPage from 'containers/MatchPage';
+import { useInjectSaga } from 'utils/injectSaga';
+import saga from './saga';
+import { createSelector } from 'reselect';
+import { makeIsApploading } from './selectors';
+import { Dispatch } from 'redux';
+import { activateGlobalLoading, disableGlobalLoading } from './actions';
+import { AppLoading } from 'components/appLoading';
 
 /*const MainWrapper = styled.div`
   width: 100%;
@@ -46,20 +54,48 @@ const MainContainer = styled.div`
   background-color: ${theme.default.mainBackground};
 `;
 
-function App() {
+interface IAppDispatchProps {
+  activateLoading: () => void;
+  disableLoading: () => void;
+}
+
+interface IAppProps extends IAppDispatchProps {
+  isLoading?: boolean;
+}
+
+const key = 'app';
+
+function App(props: IAppProps) {
+  //Register Reducer
+  //useInjectReducer({ key, reducer: AppReducer });
+  //Register SAGA
+  useInjectSaga({ key, saga });
+
+  const { isLoading } = props;
+
+  console.log('Props: ', props);
+
   return (
     <div style={{ width: '100%', height: '100%', padding: 0, margin: 0 }}>
       <AppContainer>
-        <SideNavigation />
+        <SideNavigation disabled={isLoading} />
         <VerticalWrapper width="100%" height="100%">
-          <NavBar />
+          <NavBar disabled={isLoading} />
           <MainContainer>
-            <Switch>
-              <Route exact path={ROUTES.dashboard} component={DashboardPage} />
-              <Route exact path={ROUTES.profile} component={ProfilePage} />
-              <Route exact path={ROUTES.teamPage} component={TeamPage} />
-              <Route component={NotFoundPage} />
-            </Switch>
+            {isLoading && <AppLoading size="XL" />}
+            {!isLoading && (
+              <Switch>
+                <Route
+                  exact
+                  path={ROUTES.dashboard}
+                  component={DashboardPage}
+                />
+                <Route exact path={ROUTES.profile} component={ProfilePage} />
+                <Route exact path={ROUTES.teamPage} component={TeamPage} />
+                <Route exact path={ROUTES.matchPage} component={MatchPage} />
+                <Route component={NotFoundPage} />
+              </Switch>
+            )}
           </MainContainer>
         </VerticalWrapper>
       </AppContainer>
@@ -69,11 +105,19 @@ function App() {
   );
 }
 
-const mapStateToProps = state => {
-  return state;
-};
+const mapStateToProps = createSelector(
+  makeIsApploading(),
+  isLoading => ({
+    isLoading,
+  }),
+);
+
+const mapDispatchToProps = (dispatch: Dispatch): IAppDispatchProps => ({
+  activateLoading: () => dispatch(activateGlobalLoading()),
+  disableLoading: () => dispatch(disableGlobalLoading()),
+});
 
 export default connect(
   mapStateToProps,
-  null,
+  mapDispatchToProps,
 )(App);

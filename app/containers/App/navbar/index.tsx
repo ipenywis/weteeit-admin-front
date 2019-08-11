@@ -13,6 +13,7 @@ import { push } from 'connected-react-router';
 
 export interface INavBarProps {
   isSearchBarOpen?: boolean;
+  disabled?: boolean;
 }
 interface IDispatchProps {
   openSearchBar: () => void;
@@ -36,17 +37,19 @@ const CustomDivider = styled(Divider)`
 `;
 
 function NavBar(props: INavBarProps & IDispatchProps) {
-  const { isSearchBarOpen } = props as INavBarProps;
+  const { isSearchBarOpen, disabled } = props as INavBarProps;
 
   return (
     <NavBarContainer>
-      <SearchBar
-        isOpen={isSearchBarOpen as boolean}
-        onOpenClick={props.openSearchBar}
-        onCloseClick={props.closeSearchBar}
-      />
-      <CustomDivider />
-      <ProfileBell pushRoute={props.pushRoute} />
+      {!disabled && (
+        <SearchBar
+          isOpen={!disabled && (isSearchBarOpen as boolean)}
+          onOpenClick={!disabled ? props.openSearchBar : () => {}}
+          onCloseClick={!disabled ? props.closeSearchBar : () => {}}
+        />
+      )}
+      {!disabled && <CustomDivider />}
+      {!disabled && <ProfileBell pushRoute={props.pushRoute} />}
     </NavBarContainer>
   );
 }

@@ -19,6 +19,7 @@ export interface INavigationProps {
   activeNavItem?: string;
   location?: any;
   activeSubMenu?: string;
+  disabled?: boolean;
 
   setActiveNavItem?: (itemId: string) => void;
   setActiveSubMenu?: (itemId: string | null) => void;
@@ -90,7 +91,7 @@ const CustomLink = styled(Link)`
 `;
 
 function SideNavigation(props: INavigationProps) {
-  const { activeNavItem, activeSubMenu, setActiveSubMenu } = props;
+  const { activeNavItem, activeSubMenu, setActiveSubMenu, disabled } = props;
 
   const onItemClick = (itemId: string) => {
     props.setActiveNavItem && props.setActiveNavItem(itemId);
@@ -99,7 +100,7 @@ function SideNavigation(props: INavigationProps) {
   const renderNavItem = (
     navItem: INavigationItem,
     item: string,
-    key: string,
+    key?: string,
     renderSubMenuOnHover = true,
   ) => {
     const path = navItem.path ? navItem.path : '/';
@@ -156,16 +157,23 @@ function SideNavigation(props: INavigationProps) {
   return (
     <NavigationContainer>
       <AppBrand />
-      <InnerContainer>
-        {navItemsKeys.map((item, idx) => {
-          const navItem: INavigationItem = NavigationItems[item];
-          return (
-            <Wrapper height="auto" data-me="true" onMouseLeave={onMouseLeave}>
-              {renderNavItem(navItem, item, `${item}-${idx}`)}
-            </Wrapper>
-          );
-        })}
-      </InnerContainer>
+      {!disabled && (
+        <InnerContainer>
+          {navItemsKeys.map((item, idx) => {
+            const navItem: INavigationItem = NavigationItems[item];
+            return (
+              <Wrapper
+                key={`${item}-${idx}`}
+                height="auto"
+                data-me="true"
+                onMouseLeave={onMouseLeave}
+              >
+                {renderNavItem(navItem, item)}
+              </Wrapper>
+            );
+          })}
+        </InnerContainer>
+      )}
     </NavigationContainer>
   );
 }

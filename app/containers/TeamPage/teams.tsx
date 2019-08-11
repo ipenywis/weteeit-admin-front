@@ -23,6 +23,7 @@ import {
   closeEditPopover,
   openDeleteAlert,
   closeDeleteAlert,
+  loadTeams,
 } from './actions';
 import AddNewTeam from './addNewTeam';
 import { ITeamPageState } from './type';
@@ -32,6 +33,7 @@ interface ITeamsDispatchProps {
   closeEditPopover: () => void;
   openDeleteAlert: (teamId: string) => void;
   closeDeleteAlert: () => void;
+  loadTeams: () => void;
 }
 
 export interface ITeamsProps extends ITeamsDispatchProps {
@@ -219,9 +221,19 @@ class Teams extends React.Component<ITeamsProps> {
     this.props.openEditPopover(teamKey);
   }
 
+  componentDidMount() {}
+
+  onLoadTeams() {
+    this.props.loadTeams();
+  }
+
   render() {
     return (
-      <FlexCard header="Available Teams" interactive>
+      <FlexCard
+        header="Available Teams"
+        interactive
+        onClick={this.onLoadTeams.bind(this)}
+      >
         {FAKE_TEAMS.map((team, idx) => {
           const teamKey = `${team.name}-${idx}`;
           return (
@@ -262,6 +274,7 @@ const mapDispatchToProps = (disptach: Dispatch): ITeamsDispatchProps => ({
   closeEditPopover: () => disptach(closeEditPopover()),
   openDeleteAlert: (teamId: string) => disptach(openDeleteAlert(teamId)),
   closeDeleteAlert: () => disptach(closeDeleteAlert()),
+  loadTeams: () => disptach(loadTeams()),
 });
 
 const mapStateToProps = createSelector(

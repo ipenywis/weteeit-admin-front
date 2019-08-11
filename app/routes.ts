@@ -3,4 +3,5 @@ export const ROUTES = {
   dashboard: '/',
   profile: '/profile',
   teamPage: '/team',
+  matchPage: "/match"
 };

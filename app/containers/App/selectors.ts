@@ -4,6 +4,7 @@ import { ApplicationRootState } from 'types';
 const selectRoute = (state: ApplicationRootState) => state.router;
 const selectNavigation = (state: ApplicationRootState) => state.navigation;
 const selectNavBar = (state: ApplicationRootState) => state.navBar;
+const selectApp = (state: ApplicationRootState) => state.app;
 
 const makeSelectLocation = () =>
   createSelector(
@@ -29,9 +30,16 @@ const makeActiveSubMenu = () =>
     navigation => navigation.activeSubMenu,
   );
 
+const makeIsApploading = () =>
+  createSelector(
+    selectApp,
+    app => app.isLoading,
+  );
+
 export {
   makeSelectLocation,
   makeNavActiveItem,
   makeIsSearchBarOpen,
   makeActiveSubMenu,
+  makeIsApploading,
 };

@@ -23,12 +23,6 @@ export const NavigationItems = {
   match: {
     name: 'Match',
     path: '/match',
-    submenu: {
-      newMatch: {
-        name: 'New Match',
-        path: '/match/new',
-      },
-    },
   },
   stadium: { name: 'Stadium', path: '/stadium' },
   team: {
@@ -43,4 +37,7 @@ export enum ActionTypes {
   OPEN_SEARCH_BAR = 'app/navbar/OPEN_SEARCH_BAR',
   CLOSE_SEARCH_BAR = 'app/navbar/CLOSE_SEARCH_BAR',
   SET_ACTIVE_SUBMENU = 'app/navigation/SET_ACTIVE_SUBMENU',
+  ACTIVATE_GLOBAL_LOADING = 'app/ACTIVATE_GLOBAL_LOADING',
+  DISABLE_GLOBAL_LOADING = 'app/DISABLE_GLOBAL_LOADING',
+  SHOW_ERROR = 'app/SHOW_ERROR',
 }

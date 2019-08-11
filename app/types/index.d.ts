@@ -1,7 +1,7 @@
 import { Reducer, Store } from 'redux';
 import { RouterState } from 'connected-react-router';
 import { ILanguageProviderProps } from 'containers/LanguageProvider';
-import { INavigationState, INavBarState } from 'containers/App/type';
+import { INavigationState, INavBarState, IAppState } from 'containers/App/type';
 import { ITeamPageState } from 'containers/TeamPage/type';
 
 export interface LifeStore extends Store {
@@ -26,6 +26,7 @@ export interface InjectSagaParams {
 
 // Your root reducer type, which is your redux state types also
 export interface ApplicationRootState {
+  readonly app: IAppState;
   readonly router: RouterState;
   readonly language: ILanguageProviderProps;
   readonly navigation: INavigationState;

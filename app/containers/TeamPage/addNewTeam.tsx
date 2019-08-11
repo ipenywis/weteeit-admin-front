@@ -23,7 +23,7 @@ export default function AddNewTeam(props: IAddNewTeamProps) {
   return (
     <Card large header={header || 'Add New Team'} interactive={true} standalone>
       <Form onSubmit={onSubmit}>
-        {({}) => {
+        {() => {
           return (
             <VerticalWrapper>
               <FinalFormSpy form="addNewTeam" />

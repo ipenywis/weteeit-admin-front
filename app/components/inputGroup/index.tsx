@@ -4,6 +4,7 @@ import {
   IInputGroupProps as BIInputGroupProps,
 } from '@blueprintjs/core';
 import { FieldProps, Field } from 'react-final-form';
+import { OnChange } from 'react-final-form-listeners';
 
 export interface IInputGroupProps {
   useNormalForm?: boolean;
@@ -33,4 +34,36 @@ InputGroup.defaultProps = {
   useNormalForm: true,
 };
 
-export { InputGroup };
+/**
+ *  Keep track of Field changes and react upon those changes
+ * `ex: reset input to default value`
+ */
+export interface IWhenFieldChangesProps {
+  field: string;
+  becomes: any;
+  set: string;
+  to: any;
+}
+const WhenFieldChanges = ({
+  field,
+  becomes,
+  set,
+  to,
+}: IWhenFieldChangesProps) => (
+  <Field name={set} subscription={{}}>
+    {(
+      // No subscription. We only use Field to get to the change function
+      { input: { onChange } },
+    ) => (
+      <OnChange name={field}>
+        {value => {
+          if (value === becomes) {
+            onChange(to);
+          }
+        }}
+      </OnChange>
+    )}
+  </Field>
+);
+
+export { InputGroup, WhenFieldChanges };

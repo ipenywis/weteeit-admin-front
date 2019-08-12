@@ -28,14 +28,13 @@ function AddNewTeam(props: IAddNewTeamProps) {
   //TODO: Make Logo as Blob. using string for now
   const onSubmit = (name: string, slogan: string, logo: string) => {
     props.addTeam({ name, slogan, logo } as ITeam);
+    //Clear Values
   };
-
-  //const onSelectLogoFile = (e: React.FormEvent<HTMLInputElement>) => {};
 
   return (
     <Card large header={header || 'Add New Team'} interactive={true} standalone>
       <Form onSubmit={() => {}}>
-        {({ values }: FormRenderProps) => {
+        {({ values, form }: FormRenderProps) => {
           return (
             <VerticalWrapper>
               <FinalFormSpy form="addNewTeam" />
@@ -59,9 +58,10 @@ function AddNewTeam(props: IAddNewTeamProps) {
               <Button
                 type="submit"
                 intent={Intent.PRIMARY}
-                onClick={() =>
-                  onSubmit(values.name, values.slogan, values.logo)
-                }
+                onClick={() => {
+                  onSubmit(values.name, values.slogan, values.logo);
+                  form.reset();
+                }}
               >
                 {footer || 'Add Team'}
               </Button>

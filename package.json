@@ -100,6 +100,7 @@
     "react-click-outside": "^3.0.1",
     "react-dom": "16.8.6",
     "react-final-form": "^6.0.1",
+    "react-final-form-listeners": "^1.0.2",
     "react-helmet": "6.0.0-beta",
     "react-icons": "^3.7.0",
     "react-intl": "2.8.0",

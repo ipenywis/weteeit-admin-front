@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   InputGroup as BInputGroup,
   IInputGroupProps as BIInputGroupProps,
+  Intent,
 } from '@blueprintjs/core';
 import { FieldProps, Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
@@ -21,8 +22,12 @@ function InputGroup(props: PropsType) {
   if (props.useNormalForm)
     return (
       <Field name={props.name} initialValue={props.initialValue}>
-        {({ input }) =>
-          React.cloneElement(primitiveInput, { ...input, ...props })
+        {({ input, meta: { error, touched } }) =>
+          React.cloneElement(primitiveInput, {
+            ...input,
+            ...props,
+            intent: touched && error ? Intent.DANGER : props.intent,
+          })
         }
       </Field>
     );

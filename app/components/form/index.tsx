@@ -17,7 +17,7 @@ export interface IFormProps extends FormProps {
 export function Form(props: IFormProps) {
   return (
     <FinalForm
-      onSubmit={props.onSubmit}
+      {...props}
       render={renderProps => (
         <FormContainer onSubmit={renderProps.handleSubmit}>
           {props.children(renderProps)}

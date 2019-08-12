@@ -39,7 +39,7 @@ function DateTimeInput(props: PropsType) {
             ...props,
             ...jsDateFormatter,
             onChange: onChangeWrapper(input.onChange),
-            invalidDateMessage: '',
+            invalidDateMessage: 'Please select a valid date',
           })
         }
       </Field>

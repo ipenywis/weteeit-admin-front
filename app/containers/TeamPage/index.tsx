@@ -13,7 +13,7 @@ export default function TeamPage() {
 
   return (
     <PageContainer>
-      <PageHeader header="Team" subHeader="Add Team" />
+      <PageHeader header="Team" subHeader="Manage Teams" />
       <HorizontalWrapper>
         <Teams />
         <AddNewTeam />

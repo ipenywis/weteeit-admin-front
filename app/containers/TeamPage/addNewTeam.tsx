@@ -3,27 +3,39 @@ import { Card } from 'components/card';
 import { Form } from 'components/form';
 import { VerticalWrapper } from 'components/verticalWrapper';
 import FinalFormSpy from 'finalFormSpy';
-import { FormGroup, Button, Intent, FileInput } from '@blueprintjs/core';
+import { FormGroup, Button, Intent } from '@blueprintjs/core';
+import { FileInput } from 'components/fileInput';
 import { InputGroup } from 'components/inputGroup';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { ITeam } from './type';
+import { addTeam } from './actions';
+import { FormRenderProps } from 'react-final-form';
 
-export interface IAddNewTeamProps {
+interface IAddNewTeamDispatchProps {
+  addTeam: (team: ITeam) => void;
+}
+export interface IAddNewTeamProps extends IAddNewTeamDispatchProps {
   header?: string;
   footer?: string;
   name?: string;
   slogan?: string;
 }
 
-export default function AddNewTeam(props: IAddNewTeamProps) {
+function AddNewTeam(props: IAddNewTeamProps) {
   const { name, slogan, header, footer } = props;
 
-  const onSubmit = () => {};
+  //TODO: Make Logo as Blob. using string for now
+  const onSubmit = (name: string, slogan: string, logo: string) => {
+    props.addTeam({ name, slogan, logo } as ITeam);
+  };
 
-  const onSelectLogoFile = () => {};
+  //const onSelectLogoFile = (e: React.FormEvent<HTMLInputElement>) => {};
 
   return (
     <Card large header={header || 'Add New Team'} interactive={true} standalone>
-      <Form onSubmit={onSubmit}>
-        {() => {
+      <Form onSubmit={() => {}}>
+        {({ values }: FormRenderProps) => {
           return (
             <VerticalWrapper>
               <FinalFormSpy form="addNewTeam" />
@@ -42,12 +54,15 @@ export default function AddNewTeam(props: IAddNewTeamProps) {
                 />
               </FormGroup>
               <FormGroup label="Logo">
-                <FileInput
-                  text="Choose Team logo..."
-                  onInputChange={onSelectLogoFile}
-                />
+                <FileInput name="logo" text="Choose Team logo..." />
               </FormGroup>
-              <Button type="submit" intent={Intent.PRIMARY}>
+              <Button
+                type="submit"
+                intent={Intent.PRIMARY}
+                onClick={() =>
+                  onSubmit(values.name, values.slogan, values.logo)
+                }
+              >
                 {footer || 'Add Team'}
               </Button>
             </VerticalWrapper>
@@ -57,3 +72,12 @@ export default function AddNewTeam(props: IAddNewTeamProps) {
     </Card>
   );
 }
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addTeam: (team: ITeam) => dispatch(addTeam(team)),
+});
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(AddNewTeam);

@@ -96,6 +96,9 @@ const TeamSlogan = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 function EditTeamButton(props: {

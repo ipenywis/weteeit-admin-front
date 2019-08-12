@@ -40,4 +40,9 @@ export enum ActionTypes {
   ACTIVATE_GLOBAL_LOADING = 'app/ACTIVATE_GLOBAL_LOADING',
   DISABLE_GLOBAL_LOADING = 'app/DISABLE_GLOBAL_LOADING',
   SHOW_ERROR = 'app/SHOW_ERROR',
+  HIDE_ERRORS = 'app/HIDE_ERRORS',
 }
+
+export const MESSAGES = {
+  INTERNAL_APP_ERROR: 'An Internal Error Occurred, Please Try again later!',
+};

@@ -36,10 +36,24 @@ const makeIsApploading = () =>
     app => app.isLoading,
   );
 
+const makeSelectAppError = () =>
+  createSelector(
+    selectApp,
+    app => app.error,
+  );
+
+const makeSelectDisableApp = () =>
+  createSelector(
+    selectApp,
+    app => app.disableApp,
+  );
+
 export {
   makeSelectLocation,
   makeNavActiveItem,
   makeIsSearchBarOpen,
   makeActiveSubMenu,
   makeIsApploading,
+  makeSelectAppError,
+  makeSelectDisableApp,
 };

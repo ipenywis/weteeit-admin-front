@@ -15,4 +15,14 @@ const makeSelectCurrentActiveDeleteAlert = () =>
     team => team.currentActiveDeleteAlert,
   );
 
-export { makeSelectCurrentOpenEditPopover, makeSelectCurrentActiveDeleteAlert };
+const makeSelectTeams = () =>
+  createSelector(
+    selectTeam,
+    teamPage => teamPage.teams,
+  );
+
+export {
+  makeSelectCurrentOpenEditPopover,
+  makeSelectCurrentActiveDeleteAlert,
+  makeSelectTeams,
+};

@@ -1,6 +1,9 @@
+import { IAppError } from 'types';
+
 export interface IAppState {
   isLoading: boolean;
-  error: string | null;
+  error: IAppError | null;
+  disableApp: boolean;
 }
 
 export interface INavigationState {

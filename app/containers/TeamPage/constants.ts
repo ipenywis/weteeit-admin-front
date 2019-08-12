@@ -5,4 +5,8 @@ export enum ActionTypes {
   CLOSE_DELETE_ALERT = 'app/containers/TeamPage/CLOSE_DELETE_ALERT',
   LOAD_TEAMS = 'app/containers/TeamPage/LOAD_TEAMS',
   TEAMS_LOAD_COMPLETE = 'app/containers/TeamPage/TEAMS_LOAD_COMPLETE',
+  ADD_TEAM = 'app/containers/TeamPage/ADD_TEAM',
+  REMOVE_TEAM = 'app/containers/TeamPage/REMOVE_TEAM',
+  ADD_TEAM_STATE = 'app/containers/TeamPage/ADD_TEAM_STATE',
+  REMOVE_TEAM_STATE = 'app/containers/TeamPage/REMOVE_TEAM_STATE',
 }

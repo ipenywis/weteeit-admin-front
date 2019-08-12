@@ -17,6 +17,7 @@ import { createSelector } from 'reselect';
 import {
   makeSelectCurrentOpenEditPopover,
   makeSelectCurrentActiveDeleteAlert,
+  makeSelectTeams,
 } from './selectors';
 import {
   openEditPopover,
@@ -24,22 +25,21 @@ import {
   openDeleteAlert,
   closeDeleteAlert,
   loadTeams,
+  removeTeam,
 } from './actions';
 import AddNewTeam from './addNewTeam';
-import { ITeamPageState } from './type';
+import { ITeamPageState, ITeam } from './type';
 
 interface ITeamsDispatchProps {
   openEditPopover: (teamId: string) => void;
   closeEditPopover: () => void;
-  openDeleteAlert: (teamId: string) => void;
+  openDeleteAlert: (teamId: ITeam['id']) => void;
   closeDeleteAlert: () => void;
   loadTeams: () => void;
+  removeTeam: (id: ITeam['id']) => void;
 }
 
-export interface ITeamsProps extends ITeamsDispatchProps {
-  currentOpenEditPopover: ITeamPageState['currentOpenEdit'];
-  currentActiveDeleteAlert: ITeamPageState['currentActiveDeleteAlert'];
-}
+export interface ITeamsProps extends ITeamsDispatchProps, ITeamPageState {}
 
 const FlexCard = styled(Card)`
   display: flex;
@@ -98,36 +98,6 @@ const TeamSlogan = styled.div`
   white-space: nowrap;
 `;
 
-const FAKE_LOGO =
-  'https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/ES_S%C3%A9tif_%28logo%29_2.png/220px-ES_S%C3%A9tif_%28logo%29_2.png';
-
-const FAKE_TEAMS = [
-  {
-    id: '0',
-    name: 'ESS Setif',
-    slogan: 'Entent Sportif Setifienne',
-    logo: FAKE_LOGO,
-  },
-  {
-    id: '1',
-    name: 'ESS Setif',
-    slogan: 'Entent Sportif Setifienne',
-    logo: FAKE_LOGO,
-  },
-  {
-    id: '2',
-    name: 'ESS Setif',
-    slogan: 'Entent Sportif Setifienne',
-    logo: FAKE_LOGO,
-  },
-  {
-    id: '3',
-    name: 'ESS Setif',
-    slogan: 'Entent Sportif Setifienne',
-    logo: FAKE_LOGO,
-  },
-];
-
 function EditTeamButton(props: {
   openTeamEdit: ITeamsDispatchProps['openEditPopover'];
   teamKey: string;
@@ -159,12 +129,13 @@ function EditTeamButton(props: {
 }
 
 function DeleteTeamButton(props: {
-  teamId: string;
+  teamId: ITeam['id'];
   teamName: string;
-  currentDeleteActiveAlert: string | null;
+  currentDeleteActiveAlert: ITeamPageState['currentActiveDeleteAlert'];
   toaster: IToaster | null;
   openDeleteAlert: ITeamsDispatchProps['openDeleteAlert'];
   closeDeleteAlert: ITeamsDispatchProps['closeDeleteAlert'];
+  onClick: (teamId: ITeam['id']) => void;
 }) {
   const {
     teamId,
@@ -173,10 +144,12 @@ function DeleteTeamButton(props: {
     teamName,
     closeDeleteAlert,
     toaster,
+    onClick,
   } = props;
 
   const deleteTeam = () => {
     //TODO: Send Query here
+    onClick(teamId);
     //TODO: Remove Team from state
     toaster &&
       (toaster as IToaster).show({
@@ -228,41 +201,50 @@ class Teams extends React.Component<ITeamsProps> {
   }
 
   render() {
+    const { teams } = this.props;
+
+    const isTeamsValid = teams && teams.length > 0;
+
     return (
       <FlexCard
         header="Available Teams"
         interactive
         onClick={this.onLoadTeams.bind(this)}
       >
-        {FAKE_TEAMS.map((team, idx) => {
-          const teamKey = `${team.name}-${idx}`;
-          return (
-            <TeamItem key={teamKey}>
-              <LeftSide>
-                <TeamLogo>
-                  <img src={team.logo || '#'} alt="team-logo" />
-                </TeamLogo>
-                <TeamName>{team.name}</TeamName>
-                <TeamSlogan>{team.slogan}</TeamSlogan>
-              </LeftSide>
-              <RightSide>
-                <EditTeamButton
-                  openTeamEdit={this.openTeamEdit.bind(this)}
-                  teamKey={teamKey}
-                  {...team}
-                />
-                <DeleteTeamButton
-                  teamId={teamKey}
-                  teamName={team.name}
-                  toaster={this.toaster}
-                  currentDeleteActiveAlert={this.props.currentActiveDeleteAlert}
-                  openDeleteAlert={this.props.openDeleteAlert}
-                  closeDeleteAlert={this.props.closeDeleteAlert}
-                />
-              </RightSide>
-            </TeamItem>
-          );
-        })}
+        {!isTeamsValid && <b>No Teams Available!</b>}
+        {isTeamsValid &&
+          teams.map((team, idx) => {
+            const teamKey = `${team.name}-${idx}`;
+            return (
+              <TeamItem key={teamKey}>
+                <LeftSide>
+                  <TeamLogo>
+                    <img src={team.logo || '#'} alt="team-logo" />
+                  </TeamLogo>
+                  <TeamName>{team.name}</TeamName>
+                  <TeamSlogan>{team.slogan}</TeamSlogan>
+                </LeftSide>
+                <RightSide>
+                  <EditTeamButton
+                    openTeamEdit={this.openTeamEdit.bind(this)}
+                    teamKey={teamKey}
+                    {...team}
+                  />
+                  <DeleteTeamButton
+                    teamId={team.id}
+                    teamName={team.name}
+                    toaster={this.toaster}
+                    currentDeleteActiveAlert={
+                      this.props.currentActiveDeleteAlert
+                    }
+                    openDeleteAlert={this.props.openDeleteAlert}
+                    closeDeleteAlert={this.props.closeDeleteAlert}
+                    onClick={id => this.props.removeTeam(id)}
+                  />
+                </RightSide>
+              </TeamItem>
+            );
+          })}
         <Toaster ref={ref => (this.toaster = ref)} />
       </FlexCard>
     );
@@ -272,17 +254,20 @@ class Teams extends React.Component<ITeamsProps> {
 const mapDispatchToProps = (disptach: Dispatch): ITeamsDispatchProps => ({
   openEditPopover: (teamId: string) => disptach(openEditPopover(teamId)),
   closeEditPopover: () => disptach(closeEditPopover()),
-  openDeleteAlert: (teamId: string) => disptach(openDeleteAlert(teamId)),
+  openDeleteAlert: (teamId: ITeam['id']) => disptach(openDeleteAlert(teamId)),
   closeDeleteAlert: () => disptach(closeDeleteAlert()),
   loadTeams: () => disptach(loadTeams()),
+  removeTeam: (id: ITeam['id']) => disptach(removeTeam(id)),
 });
 
 const mapStateToProps = createSelector(
   makeSelectCurrentOpenEditPopover(),
   makeSelectCurrentActiveDeleteAlert(),
-  (currentOpenEditPopover, currentActiveDeleteAlert) => ({
-    currentOpenEditPopover,
+  makeSelectTeams(),
+  (currentOpenEdit, currentActiveDeleteAlert, teams): ITeamPageState => ({
+    currentOpenEdit,
     currentActiveDeleteAlert,
+    teams,
   }),
 );
 

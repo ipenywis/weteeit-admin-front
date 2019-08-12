@@ -38,3 +38,8 @@ export interface IAction {
   type: string;
   payload: any;
 }
+
+export interface IAppError {
+  state: 'normal' | 'critical';
+  message: string;
+}

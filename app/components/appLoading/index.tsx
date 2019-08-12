@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 
@@ -80,11 +80,20 @@ const LoadingText = styled.div`
   display: flex;
   font-size: 13px;
   font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
   color: #3d3d3d;
   margin-top: 10px;
 `;
 
 function AppLoading(props: IAppLoadingProps) {
+  const [loadingDots, setDots] = useState(0);
+
+  //Simulate loading text dots animation (ex: loading. => loading.. => loading...)
+  setTimeout(
+    () => (loadingDots === 3 ? setDots(0) : setDots(loadingDots + 1)),
+    1000,
+  );
+
   return (
     <LoadingContainer>
       <Spinner {...props}>
@@ -92,7 +101,13 @@ function AppLoading(props: IAppLoadingProps) {
         <DoubleBounce />
         <DoubleBounce2 />
       </Spinner>
-      {props.showLoadingText && <LoadingText>Loading...</LoadingText>}
+      {props.showLoadingText && (
+        <LoadingText>
+          loading{loadingDots === 1 && '.'}
+          {loadingDots === 2 && '..'}
+          {loadingDots === 3 && '...'}
+        </LoadingText>
+      )}
     </LoadingContainer>
   );
 }

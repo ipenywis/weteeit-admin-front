@@ -3,5 +3,7 @@ export const ROUTES = {
   dashboard: '/',
   profile: '/profile',
   teamPage: '/team',
-  matchPage: "/match"
+  matchPage: '/match',
+  login: '/login',
+  resetPassword: '/password-reset',
 };

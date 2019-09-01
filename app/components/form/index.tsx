@@ -6,7 +6,10 @@ const FormContainer = styled.form`
   padding: 5px;
 `;
 
+const FinalFormContainer = styled.div``;
+
 export interface IFormProps extends FormProps {
+  className?: string;
   children: (...args: any) => JSX.Element | any;
 }
 
@@ -16,13 +19,15 @@ export interface IFormProps extends FormProps {
  */
 export function Form(props: IFormProps) {
   return (
-    <FinalForm
-      {...props}
-      render={renderProps => (
-        <FormContainer onSubmit={renderProps.handleSubmit}>
-          {props.children(renderProps)}
-        </FormContainer>
-      )}
-    />
+    <FinalFormContainer className={props.className}>
+      <FinalForm
+        {...props}
+        render={renderProps => (
+          <FormContainer onSubmit={renderProps.handleSubmit}>
+            {props.children(renderProps)}
+          </FormContainer>
+        )}
+      />
+    </FinalFormContainer>
   );
 }

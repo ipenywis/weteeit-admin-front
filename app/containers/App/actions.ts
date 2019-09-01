@@ -18,6 +18,11 @@ export const activateGlobalLoading = () =>
 export const disableGlobalLoading = () =>
   action(ActionTypes.DISABLE_GLOBAL_LOADING);
 
+export const needToAuthenticate = () =>
+  action(ActionTypes.NEED_TO_AUTHENTICATE);
+
+export const authenticated = () => action(ActionTypes.AUTHENTICATED);
+
 //COMMON ACTIONS
 export const showError = (error: IAppError) =>
   action(ActionTypes.SHOW_ERROR, error);

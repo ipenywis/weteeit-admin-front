@@ -55,7 +55,6 @@ function AddNewTeam(props: IAddNewTeamProps) {
           form,
           pristine,
           submitting,
-          dirty,
           hasValidationErrors,
         }: FormRenderProps) => {
           return (

@@ -11,6 +11,7 @@ export interface IThemeInterface {
 export const theme = {
   default: {
     primary: '#007bff',
+    primaryHover: '#106ba3',
     mainBackground: '#F5F6F8',
     componentBackground: '#fff',
     componentBackgroundSecondary: '#fbfbfb',
@@ -21,6 +22,8 @@ export const theme = {
     dark: '#343b3c',
     muted: '#818ea3',
     itemBackground: '#f7f7f7',
+    danger: '#e74c3c',
+    semiDanger: '#db373730',
   },
 };
 

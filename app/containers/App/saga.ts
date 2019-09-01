@@ -1,10 +1,10 @@
-import { all, put } from 'redux-saga/effects';
+import { put } from 'redux-saga/effects';
 
 //Container SAGAs
 import { getTeams } from '../TeamPage/saga';
 import { activateGlobalLoading, disableGlobalLoading } from './actions';
 
-function* bootstrap() {
+export function* bootstrap() {
   //TODO: Active Loading State here
   yield put(activateGlobalLoading());
   yield getTeams();
@@ -13,5 +13,5 @@ function* bootstrap() {
 }
 
 export default function* rootSaga() {
-  yield all([bootstrap()]);
+  ///yield all([bootstrap()]);
 }

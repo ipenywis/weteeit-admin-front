@@ -3,6 +3,7 @@ import { IAppState } from './type';
 import { ActionTypes } from './constants';
 
 const initialState: IAppState = {
+  isAuthenticated: false,
   isLoading: false,
   disableApp: false,
   error: null,
@@ -17,6 +18,10 @@ export default function AppReducer(
       return { ...state, isLoading: true };
     case ActionTypes.DISABLE_GLOBAL_LOADING:
       return { ...state, isLoading: false };
+    case ActionTypes.AUTHENTICATED:
+      return { ...state, isAuthenticated: true };
+    case ActionTypes.NEED_TO_AUTHENTICATE:
+      return { ...state, isAuthenticated: false };
     case ActionTypes.SHOW_ERROR: {
       if (action.payload && (action.payload as IAppError).state === 'critical')
         return { ...state, error: action.payload, disableApp: true };

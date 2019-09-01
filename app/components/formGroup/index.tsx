@@ -5,14 +5,19 @@ import {
   Intent,
 } from '@blueprintjs/core';
 import { Field } from 'react-final-form';
+import styled from 'styled-components';
 
 export interface IFormGroupProps extends IBFormGroupProps {
   name?: string;
   children?: any | any[];
 }
 
+const StyledFormGroup = styled(BFormGroup)``;
+
 function FormGroup(props: IFormGroupProps) {
-  const primitiveFormGroup = <BFormGroup>{props.children}</BFormGroup>;
+  const primitiveFormGroup = (
+    <StyledFormGroup>{props.children}</StyledFormGroup>
+  );
 
   if (props.name)
     return (

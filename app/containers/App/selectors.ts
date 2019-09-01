@@ -48,6 +48,12 @@ const makeSelectDisableApp = () =>
     app => app.disableApp,
   );
 
+const makeSelectIsAuthenticated = () =>
+  createSelector(
+    selectApp,
+    app => app.isAuthenticated,
+  );
+
 export {
   makeSelectLocation,
   makeNavActiveItem,
@@ -56,4 +62,5 @@ export {
   makeIsApploading,
   makeSelectAppError,
   makeSelectDisableApp,
+  makeSelectIsAuthenticated,
 };

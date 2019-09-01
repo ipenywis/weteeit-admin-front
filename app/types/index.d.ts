@@ -3,6 +3,7 @@ import { RouterState } from 'connected-react-router';
 import { ILanguageProviderProps } from 'containers/LanguageProvider';
 import { INavigationState, INavBarState, IAppState } from 'containers/App/type';
 import { ITeamPageState } from 'containers/TeamPage/type';
+import { ILoginState } from 'containers/loginPage/type';
 
 export interface LifeStore extends Store {
   injectedReducers: any;
@@ -32,6 +33,7 @@ export interface ApplicationRootState {
   readonly navigation: INavigationState;
   readonly navBar: INavBarState;
   readonly teamPage: ITeamPageState;
+  readonly login: ILoginState;
 }
 
 export interface IAction {

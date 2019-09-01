@@ -13,6 +13,7 @@ import FinalFormReducer from './finalFormDuck';
 import TeamReducer from 'containers/TeamPage/reducer';
 import MatchPageReducer from 'containers/MatchPage/reducer';
 import AppReducer from 'containers/App/reducer';
+import LoginReducer from 'containers/loginPage/reducer';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -27,6 +28,7 @@ export default function createReducer(injectedReducers = {}) {
     teamPage: TeamReducer,
     matchPage: MatchPageReducer,
     finalForm: FinalFormReducer,
+    login: LoginReducer,
     ...injectedReducers,
   });
 

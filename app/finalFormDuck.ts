@@ -15,6 +15,7 @@ export const UPDATE_FORM_STATE = 'final-form-redux/finalForm/UPDATE_FORM_STATE';
 
 //Reducer
 export default function reducer(state = {}, action: Partial<IFormAction> = {}) {
+  console.log('Form: ', action.form);
   switch (action.type) {
     case UPDATE_FORM_STATE:
       return {

@@ -14,18 +14,28 @@ import { createSelector } from 'reselect';
 import { Dispatch } from 'redux';
 import { makeSelectLoginError } from './selectors';
 import { setLoginError, clearLoginErrors } from './actions';
-//import { ErrorCallout } from 'components/errorCallout';
 import { AppToaster } from 'components/toaster';
 import { ROUTES } from 'routes';
 import { Link } from 'components/link';
+import axios from 'axios';
+import { makeSelectApiUrl } from 'containers/App/selectors';
+import { FormState } from 'final-form';
+import { authenticated } from 'containers/App/actions';
+import { withRouter } from 'react-router';
+import { IWithRouter } from 'types/router';
+import * as cookies from 'js-cookie';
+import { AUTH_COOKIE_KEY } from 'common';
 
 interface ILoginDispatchProps {
   setLoginError: (error: string) => void;
   clearLoginErrors: () => void;
+  authenticated: () => void;
 }
 
-export interface ILoginProps extends ILoginDispatchProps {
+export interface ILoginProps extends ILoginDispatchProps, IWithRouter {
   error: string;
+  apiUrl: string;
+  loginForm: FormState;
 }
 
 const CustomPageContainer = styled(PageContainer)`
@@ -102,9 +112,57 @@ class LoginPage extends React.Component<ILoginProps> {
     return errors;
   }
 
-  private login() {
+  private login(values: any): Promise<any> {
     console.log('Login in...');
-    this.props.setLoginError('Cannot Login!, Please Tray again Later TEST XD');
+    return new Promise(async (rs, rj) => {
+      const { apiUrl } = this.props;
+      const username = values.username;
+      const password = values.password;
+      const response = await axios
+        .post<{ jwtToken: string }>(apiUrl + '/admin/login', {
+          username,
+          password,
+        })
+        .catch(err => {
+          this.props.setLoginError('Username or Password is incorret');
+          rj();
+        });
+      if (!response) {
+        return rj();
+      }
+
+      AppToaster.show({
+        message: `Welcome Back ${username}`,
+        intent: Intent.SUCCESS,
+      });
+
+      //Save token for 7days if staySignedIn
+      const expiresIn = values.staySignedIn ? 7 : undefined;
+      this.saveTokenInSession(response.data.jwtToken, expiresIn);
+      //Authenticate
+      this.authenticate();
+      //Redirect to dashboard
+      this.redirectToDashboard();
+      //Resolve
+      rs();
+    });
+  }
+
+  /**
+   * save JWT Token in session cookie
+   * where `expiresIn` Number of days
+   * @param expiresIn
+   */
+  private saveTokenInSession(token: string, expiresIn?: number) {
+    cookies.set(AUTH_COOKIE_KEY, 'JWT ' + token, { expires: expiresIn });
+  }
+
+  private authenticate() {
+    this.props.authenticated();
+  }
+
+  private redirectToDashboard() {
+    this.props.history.push(ROUTES.dashboard);
   }
 
   render() {
@@ -132,7 +190,7 @@ class LoginPage extends React.Component<ILoginProps> {
                   <FormTitle>Login</FormTitle>
                   {/*<ErrorCallout show={error !== null}>{error}</ErrorCallout>*/}
                 </FormHeader>
-                <FinalFormSpy form="login" />
+                <FinalFormSpy form="loginForm" />
                 <FormContainer>
                   <FormGroup label="Username" name="username">
                     <InputGroup
@@ -166,6 +224,7 @@ class LoginPage extends React.Component<ILoginProps> {
                     icon="log-in"
                     intent={Intent.PRIMARY}
                     disabled={hasValidationErrors || pristine || submitting}
+                    loading={submitting}
                     onClick={() => {
                       handleSubmit();
                       form.reset();
@@ -185,15 +244,17 @@ class LoginPage extends React.Component<ILoginProps> {
 
 const mapStateToProps = createSelector(
   makeSelectLoginError(),
-  error => ({ error }),
+  makeSelectApiUrl(),
+  (error, apiUrl) => ({ error, apiUrl }),
 );
 
 const mapDispatchToProps = (dispatch: Dispatch): ILoginDispatchProps => ({
   setLoginError: (error: string) => dispatch(setLoginError(error)),
   clearLoginErrors: () => dispatch(clearLoginErrors()),
+  authenticated: () => dispatch(authenticated()),
 });
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(LoginPage);
+)(LoginPage as any) as any);

@@ -17,7 +17,10 @@ import { InjectSagaParams, LifeStore } from 'types';
  *
  */
 
-export default function hocWithSaga<P>({ key, saga, mode }: InjectSagaParams) {
+export default function hocWithSaga<P>(
+  { key, saga, mode }: InjectSagaParams,
+  args?: any,
+) {
   function wrap(
     WrappedComponent: React.ComponentType<P>,
   ): React.ComponentType<P> {
@@ -37,7 +40,11 @@ export default function hocWithSaga<P>({ key, saga, mode }: InjectSagaParams) {
 
         this.injectors = getInjectors(context.store);
 
-        this.injectors.injectSaga(key, { saga: saga, mode: mode }, this.props);
+        this.injectors.injectSaga(
+          key,
+          { saga: saga, mode: mode },
+          { ...this.props, ...args },
+        );
       }
 
       public componentWillUnmount() {
@@ -54,11 +61,17 @@ export default function hocWithSaga<P>({ key, saga, mode }: InjectSagaParams) {
   return wrap;
 }
 
-const useInjectSaga = ({ key, saga, mode }: InjectSagaParams) => {
+/**
+ * **MODIFIED**
+ * Args parameter will be passed to the current saga
+ * @param param0
+ * @param args
+ */
+const useInjectSaga = ({ key, saga, mode }: InjectSagaParams, args: any) => {
   const context = React.useContext(ReactReduxContext);
   React.useEffect(() => {
     const injectors = getInjectors(context.store as LifeStore);
-    injectors.injectSaga(key, { saga: saga, mode: mode });
+    injectors.injectSaga(key, { saga: saga, mode: mode }, args);
 
     return () => {
       injectors.ejectSaga(key);

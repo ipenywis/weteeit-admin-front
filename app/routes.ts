@@ -2,8 +2,8 @@
 export const ROUTES = {
   dashboard: '/',
   profile: '/profile',
-  teamPage: '/team',
-  matchPage: '/match',
+  product: '/product',
+  order: '/order',
   login: '/login',
   resetPassword: '/password-reset',
 };

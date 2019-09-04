@@ -15,11 +15,22 @@ type PropsType = (ICheckBoxProps | IBCheckBoxProps) &
 function Checkbox(props: PropsType) {
   const primitiveCheckbox = <BCheckbox />;
 
+  const onChangeWrapper = (inputOnChange: (e: any) => void) => {
+    return function(e: React.ChangeEvent<HTMLInputElement>) {
+      const customEvent = { target: { value: e.target.checked } };
+      inputOnChange(customEvent);
+    };
+  };
+
   if (props.useNormalForm)
     return (
       <Field name={props.name} initialValue={props.initialValue}>
         {({ input }) =>
-          React.cloneElement(primitiveCheckbox, { ...input, ...props })
+          React.cloneElement(primitiveCheckbox, {
+            ...input,
+            ...props,
+            onChange: onChangeWrapper(input.onChange),
+          })
         }
       </Field>
     );

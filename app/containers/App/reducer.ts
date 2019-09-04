@@ -7,6 +7,8 @@ const initialState: IAppState = {
   isLoading: false,
   disableApp: false,
   error: null,
+  apiUrl: 'http://localhost:3000',
+  isInitialized: false,
 };
 
 export default function AppReducer(
@@ -29,6 +31,8 @@ export default function AppReducer(
     }
     case ActionTypes.HIDE_ERRORS:
       return { ...state, error: null };
+    case ActionTypes.INITIALIZED:
+      return { ...state, isInitialized: true };
     default:
       return state;
   }

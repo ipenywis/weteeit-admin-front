@@ -2,8 +2,8 @@ import { Reducer, Store } from 'redux';
 import { RouterState } from 'connected-react-router';
 import { ILanguageProviderProps } from 'containers/LanguageProvider';
 import { INavigationState, INavBarState, IAppState } from 'containers/App/type';
-import { ITeamPageState } from 'containers/TeamPage/type';
 import { ILoginState } from 'containers/loginPage/type';
+import { FormState } from 'final-form';
 
 export interface LifeStore extends Store {
   injectedReducers: any;
@@ -21,8 +21,12 @@ export interface InjectReducerParams {
 
 export interface InjectSagaParams {
   key: keyof ApplicationRootState;
-  saga: () => IterableIterator<any>;
+  saga: (...args: any) => IterableIterator<any>;
   mode?: string | undefined;
+}
+
+export interface IFinalForms {
+  [key: string]: FormState;
 }
 
 // Your root reducer type, which is your redux state types also
@@ -32,8 +36,8 @@ export interface ApplicationRootState {
   readonly language: ILanguageProviderProps;
   readonly navigation: INavigationState;
   readonly navBar: INavBarState;
-  readonly teamPage: ITeamPageState;
   readonly login: ILoginState;
+  readonly finalForm: IFinalForms;
 }
 
 export interface IAction {

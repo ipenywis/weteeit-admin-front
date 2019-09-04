@@ -5,6 +5,8 @@ export interface IAppState {
   isLoading: boolean;
   error: IAppError | null;
   disableApp: boolean;
+  apiUrl: string;
+  isInitialized: boolean;
 }
 
 export interface INavigationState {

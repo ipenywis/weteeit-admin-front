@@ -35,7 +35,7 @@ export function AppBrand() {
       <LogoContainer>
         <img src={TicketSVG} />
       </LogoContainer>
-      <LogoText>Easickets Dashboard</LogoText>
+      <LogoText>Weteeit Dashboard</LogoText>
     </AppBrandContainer>
   );
 }

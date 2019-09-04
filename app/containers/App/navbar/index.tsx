@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import SearchBar from 'components/searchBar';
 import { Dispatch } from 'redux';
-import { openSearchBar, closeSearchBar } from '../actions';
+import { openSearchBar, closeSearchBar, needToAuthenticate } from '../actions';
 import { createSelector } from 'reselect';
 import { makeIsSearchBarOpen } from '../selectors';
 import ProfileBell from 'components/profileBell';
 import { Divider } from '@blueprintjs/core';
 import { push } from 'connected-react-router';
+import * as cookies from 'js-cookie';
+import { AUTH_COOKIE_KEY } from 'common';
 
 export interface INavBarProps {
   isSearchBarOpen?: boolean;
@@ -19,6 +21,7 @@ interface IDispatchProps {
   openSearchBar: () => void;
   closeSearchBar: () => void;
   pushRoute: (path: string) => void;
+  needToAuthenticate: () => void;
 }
 
 const NavBarContainer = styled.div`
@@ -39,6 +42,13 @@ const CustomDivider = styled(Divider)`
 function NavBar(props: INavBarProps & IDispatchProps) {
   const { isSearchBarOpen, disabled } = props as INavBarProps;
 
+  const logout = () => {
+    //Delete auth cookie
+    cookies.remove(AUTH_COOKIE_KEY);
+    //Change to un-authenticated state
+    props.needToAuthenticate();
+  };
+
   return (
     <NavBarContainer>
       {!disabled && (
@@ -49,7 +59,9 @@ function NavBar(props: INavBarProps & IDispatchProps) {
         />
       )}
       {!disabled && <CustomDivider />}
-      {!disabled && <ProfileBell pushRoute={props.pushRoute} />}
+      {!disabled && (
+        <ProfileBell pushRoute={props.pushRoute} onLogout={logout} />
+      )}
     </NavBarContainer>
   );
 }
@@ -71,6 +83,7 @@ const mapDispatchToProps = (dispatch: Dispatch): IDispatchProps => ({
   pushRoute: (path: string) => {
     dispatch(push(path));
   },
+  needToAuthenticate: () => dispatch(needToAuthenticate()),
 });
 
 export default connect(

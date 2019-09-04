@@ -92,6 +92,7 @@ const CustomMenuItem = styled(MenuItem)`
 
 export interface IProfileBellProps {
   pushRoute: (path: string) => void;
+  onLogout: () => void;
 }
 
 export default class ProfileBell extends React.Component<IProfileBellProps> {
@@ -110,7 +111,11 @@ export default class ProfileBell extends React.Component<IProfileBellProps> {
           onClick={() => pushRoute(ROUTES.profile)}
         />
         <MenuDivider />
-        <CustomMenuItem text="Logout" intent={Intent.DANGER} />
+        <CustomMenuItem
+          text="Logout"
+          intent={Intent.DANGER}
+          onClick={this.props.onLogout}
+        />
       </CustomMenu>
     );
   }

@@ -2,6 +2,9 @@
 
 const express = require('express');
 const logger = require('./logger');
+const dotenv = require('dotenv');
+//load .env
+dotenv.config();
 
 const argv = require('./argv');
 const port = require('./port');

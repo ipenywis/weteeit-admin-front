@@ -30,6 +30,11 @@ export const showError = (error: IAppError) =>
 /**
  * This will only clean the errors state where the toast would hide automatically once the timer is up
  * It won't hide the toast instantly
- * use Toaster.clear() to hide toasts instantly
+ * use `Toaster.clear()` to hide toasts instantly
  */
 export const hideErrors = () => action(ActionTypes.HIDE_ERRORS);
+
+export const init = (isAuthenticated: boolean) =>
+  action(ActionTypes.INIT, isAuthenticated);
+
+export const initialized = () => action(ActionTypes.INITIALIZED);

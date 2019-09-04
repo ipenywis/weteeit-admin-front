@@ -1,3 +1,5 @@
+import { ROUTES } from 'routes';
+
 /*
  * AppConstants
  * Each action has a corresponding type, which the reducer knows and picks up on.
@@ -18,16 +20,11 @@ export interface INavigationItem {
 export const NavigationItems = {
   dashboard: {
     name: 'Dashboard',
-    path: '/',
+    path: ROUTES.dashboard,
   },
   match: {
-    name: 'Match',
-    path: '/match',
-  },
-  stadium: { name: 'Stadium', path: '/stadium' },
-  team: {
-    name: 'Team',
-    path: '/team',
+    name: 'Product',
+    path: ROUTES.product,
   },
 };
 
@@ -43,6 +40,8 @@ export enum ActionTypes {
   HIDE_ERRORS = 'app/HIDE_ERRORS',
   NEED_TO_AUTHENTICATE = 'app/NEED_TO_AUTHENTICATE',
   AUTHENTICATED = 'app/AUTHENTICATED',
+  INIT = 'app/INIT', ///< Bootstrap App
+  INITIALIZED = 'app/INITIALIZED',
 }
 
 export const MESSAGES = {

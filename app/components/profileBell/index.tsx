@@ -91,7 +91,9 @@ const CustomMenuItem = styled(MenuItem)`
 `;
 
 export interface IProfileBellProps {
-  pushRoute: (path: string) => void;
+  username: string;
+
+  pushRoute?: (path: string) => void;
   onLogout: () => void;
 }
 
@@ -108,7 +110,7 @@ export default class ProfileBell extends React.Component<IProfileBellProps> {
       <CustomMenu large={false}>
         <CustomMenuItem
           text="My Profile"
-          onClick={() => pushRoute(ROUTES.profile)}
+          onClick={() => pushRoute && pushRoute(ROUTES.profile)}
         />
         <MenuDivider />
         <CustomMenuItem
@@ -132,7 +134,7 @@ export default class ProfileBell extends React.Component<IProfileBellProps> {
             <ProfileImage>
               <img src="https://s3.amazonaws.com/37assets/svn/1065-IMG_2529.jpg" />
             </ProfileImage>
-            <ProfileName>Islem Maboud</ProfileName>
+            <ProfileName>{this.props.username}</ProfileName>
             <ArrowIcon>
               <FontAwesomeIcon icon={faSortDown} size="sm" />
             </ArrowIcon>

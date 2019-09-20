@@ -102,6 +102,8 @@ const StyledLink = styled(Link)`
 `;
 
 class LoginPage extends React.Component<ILoginProps> {
+  private toastKey: string | null = null;
+
   private validate(values: any): Object {
     const errors: any = {};
     if (!values.username || (values.username && values.username.trim() === ''))
@@ -112,8 +114,15 @@ class LoginPage extends React.Component<ILoginProps> {
     return errors;
   }
 
+  private showError(error: string) {
+    this.toastKey = AppToaster.show(
+      { message: error, intent: Intent.DANGER },
+      this.toastKey || undefined,
+    );
+    this.props.setLoginError(error);
+  }
+
   private login(values: any): Promise<any> {
-    console.log('Login in...');
     return new Promise(async (rs, rj) => {
       const { apiUrl } = this.props;
       const username = values.username;
@@ -124,17 +133,20 @@ class LoginPage extends React.Component<ILoginProps> {
           password,
         })
         .catch(err => {
-          this.props.setLoginError('Username or Password is incorret');
+          this.showError('Username or Password is incorret');
           rj();
         });
       if (!response) {
         return rj();
       }
 
-      AppToaster.show({
-        message: `Welcome Back ${username}`,
-        intent: Intent.SUCCESS,
-      });
+      this.toastKey = AppToaster.show(
+        {
+          message: `Welcome Back ${username}`,
+          intent: Intent.SUCCESS,
+        },
+        this.toastKey || undefined,
+      );
 
       //Save token for 7days if staySignedIn
       const expiresIn = values.staySignedIn ? 7 : undefined;
@@ -166,11 +178,6 @@ class LoginPage extends React.Component<ILoginProps> {
   }
 
   render() {
-    const { error } = this.props;
-
-    //Show errors if any
-    if (error) AppToaster.show({ message: error, intent: Intent.DANGER });
-
     return (
       <CustomPageContainer>
         <LoginContainer>

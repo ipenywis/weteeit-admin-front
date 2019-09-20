@@ -1,6 +1,10 @@
 export interface ILoginState {
-  username: string;
-  password: string;
   staySignedIn: boolean;
   error: string | null;
+  authAdmin: IAuthAdmin | null;
+}
+
+export interface IAuthAdmin {
+  username: string;
+  email: string;
 }

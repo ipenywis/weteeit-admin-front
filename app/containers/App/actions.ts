@@ -1,6 +1,7 @@
 import { ActionTypes } from './constants';
 import { action } from 'typesafe-actions';
 import { IAppError } from 'types';
+import { IAuthAdmin } from 'containers/loginPage/type';
 
 export const setActiveNavItem = (navItemId: string) =>
   action(ActionTypes.SET_ACTIVE_NAV_ITEM, navItemId);
@@ -38,3 +39,6 @@ export const init = (isAuthenticated: boolean) =>
   action(ActionTypes.INIT, isAuthenticated);
 
 export const initialized = () => action(ActionTypes.INITIALIZED);
+
+export const setAuthAdmin = (authAdmin: IAuthAdmin) =>
+  action(ActionTypes.SET_AUTH_ADMIN, authAdmin);

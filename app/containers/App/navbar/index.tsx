@@ -13,15 +13,16 @@ import { push } from 'connected-react-router';
 import * as cookies from 'js-cookie';
 import { AUTH_COOKIE_KEY } from 'common';
 
-export interface INavBarProps {
+export interface INavBarProps extends IDispatchProps {
   isSearchBarOpen?: boolean;
   disabled?: boolean;
+  username?: string;
 }
 interface IDispatchProps {
-  openSearchBar: () => void;
-  closeSearchBar: () => void;
-  pushRoute: (path: string) => void;
-  needToAuthenticate: () => void;
+  openSearchBar?: () => void;
+  closeSearchBar?: () => void;
+  pushRoute?: (path: string) => void;
+  needToAuthenticate?: () => void;
 }
 
 const NavBarContainer = styled.div`
@@ -39,14 +40,14 @@ const CustomDivider = styled(Divider)`
   margin: 0;
 `;
 
-function NavBar(props: INavBarProps & IDispatchProps) {
+function NavBar(props: INavBarProps) {
   const { isSearchBarOpen, disabled } = props as INavBarProps;
 
   const logout = () => {
     //Delete auth cookie
     cookies.remove(AUTH_COOKIE_KEY);
     //Change to un-authenticated state
-    props.needToAuthenticate();
+    props.needToAuthenticate && props.needToAuthenticate();
   };
 
   return (
@@ -60,7 +61,11 @@ function NavBar(props: INavBarProps & IDispatchProps) {
       )}
       {!disabled && <CustomDivider />}
       {!disabled && (
-        <ProfileBell pushRoute={props.pushRoute} onLogout={logout} />
+        <ProfileBell
+          pushRoute={props.pushRoute}
+          onLogout={logout}
+          username={props.username as string}
+        />
       )}
     </NavBarContainer>
   );
@@ -86,7 +91,7 @@ const mapDispatchToProps = (dispatch: Dispatch): IDispatchProps => ({
   needToAuthenticate: () => dispatch(needToAuthenticate()),
 });
 
-export default connect(
+export default connect<void, void, INavBarProps>(
   mapStateToProps,
   mapDispatchToProps,
 )(NavBar);

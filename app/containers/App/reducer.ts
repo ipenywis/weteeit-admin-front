@@ -9,6 +9,7 @@ const initialState: IAppState = {
   error: null,
   apiUrl: 'http://localhost:3000',
   isInitialized: false,
+  authAdmin: null,
 };
 
 export default function AppReducer(
@@ -33,6 +34,8 @@ export default function AppReducer(
       return { ...state, error: null };
     case ActionTypes.INITIALIZED:
       return { ...state, isInitialized: true };
+    case ActionTypes.SET_AUTH_ADMIN:
+      return { ...state, authAdmin: action.payload };
     default:
       return state;
   }

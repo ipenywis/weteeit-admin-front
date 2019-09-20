@@ -66,6 +66,12 @@ const makeSelectIsInitialized = () =>
     app => app.isInitialized,
   );
 
+const makeSelectAuthAdmin = () =>
+  createSelector(
+    selectApp,
+    app => app.authAdmin,
+  );
+
 export {
   makeSelectLocation,
   makeNavActiveItem,
@@ -77,4 +83,5 @@ export {
   makeSelectIsAuthenticated,
   makeSelectApiUrl,
   makeSelectIsInitialized,
+  makeSelectAuthAdmin,
 };

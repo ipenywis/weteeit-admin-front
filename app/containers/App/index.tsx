@@ -1,6 +1,6 @@
 /**
  *
- * App.js
+ * App.tsx
  *
  * This component is the skeleton around the actual pages, and should only
  * contain code that should be seen on all pages. (e.g. navigation bar)
@@ -49,8 +49,13 @@ import { AppToaster } from 'components/toaster';
 import { IAppState } from './type';
 import { Intent, Icon } from '@blueprintjs/core';
 import { MESSAGES } from './constants';
-import loginPage from 'containers/loginPage';
+import LoginPage from 'containers/loginPage';
 import { PrivateRoute } from 'components/privateRoute';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { apolloClient } from './graphqlSetup';
+import { makeSelectAuthAdmin } from './selectors';
+import { IAuthAdmin } from 'containers/loginPage/type';
+import ProductPage from 'containers/productPage';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -92,7 +97,9 @@ interface IAppDispatchProps {
   initialized: () => void;
 }
 
-export interface IAppProps extends IAppDispatchProps, IAppState {}
+export interface IAppProps extends IAppDispatchProps, IAppState {
+  authAdmin: IAuthAdmin;
+}
 
 const key = 'app';
 
@@ -100,19 +107,19 @@ class App extends React.Component<IAppProps> {
   componentDidUpdate() {
     //Initialize Application
     //NOTE: Initialization will take place in bootstrap saga only if admin is authenticated
-    if (!this.props.isInitialized) {
+    if (!this.props.isInitialized && !this.props.disableApp) {
       this.props.init(this.props.isAuthenticated);
     }
   }
 
   render() {
-    const { error, isLoading, disableApp, isAuthenticated } = this.props;
-    //Register App SAGA
-    //useInjectSaga({ key, saga: appSaga }, { verifyUrl });
-
-    //Register Bootstrap SAGA
-    //NOTE: Bootstrap can only be initialized if user is Authenticated
-    //useInjectSaga({ key, saga: bootstrapSaga }, { isAuthenticated });
+    const {
+      error,
+      isLoading,
+      disableApp,
+      isAuthenticated,
+      authAdmin,
+    } = this.props;
 
     //Show if there are any errors
     //NOTE: most of times errors are global which means any component can set app error
@@ -129,41 +136,56 @@ class App extends React.Component<IAppProps> {
     return (
       <div style={{ width: '100%', height: '100%', padding: 0, margin: 0 }}>
         {!disableApp && (
-          <AppContainer>
-            {isAuthenticated && <SideNavigation disabled={isLoading} />}
-            <VerticalWrapper width="100%" height="100%">
-              {isAuthenticated && <NavBar disabled={isLoading} />}
-              <MainContainer>
-                {isLoading && <AppLoading size="XL" />}
-                {!isLoading && (
-                  <Switch>
-                    <PrivateRoute
-                      redirectTo={ROUTES.login}
-                      allowAccess={isAuthenticated}
-                      exact
-                      path={ROUTES.dashboard}
-                      component={DashboardPage}
-                    />
-                    <PrivateRoute
-                      redirectTo={ROUTES.login}
-                      allowAccess={isAuthenticated}
-                      exact
-                      path={ROUTES.profile}
-                      component={ProfilePage}
-                    />
-                    <PrivateRoute
-                      allowAccess={!isAuthenticated}
-                      redirectTo={ROUTES.dashboard}
-                      exact
-                      path={ROUTES.login}
-                      component={loginPage}
-                    />
-                    <Route component={NotFoundPage} />
-                  </Switch>
+          <ApolloProvider client={apolloClient}>
+            <AppContainer>
+              {isAuthenticated && <SideNavigation disabled={isLoading} />}
+              <VerticalWrapper width="100%" height="100%">
+                {isAuthenticated && (
+                  <NavBar
+                    isSearchBarOpen={false}
+                    disabled={isLoading}
+                    username={authAdmin && authAdmin.username}
+                  />
                 )}
-              </MainContainer>
-            </VerticalWrapper>
-          </AppContainer>
+                <MainContainer>
+                  {isLoading && <AppLoading size="XL" />}
+                  {!isLoading && (
+                    <Switch>
+                      <PrivateRoute
+                        redirectTo={ROUTES.login}
+                        allowAccess={isAuthenticated}
+                        exact
+                        path={ROUTES.dashboard}
+                        render={() => <DashboardPage />}
+                      />
+                      <PrivateRoute
+                        redirectTo={ROUTES.login}
+                        allowAccess={isAuthenticated}
+                        exact
+                        path={ROUTES.profile}
+                        render={() => <ProfilePage />}
+                      />
+                      <PrivateRoute
+                        allowAccess={!isAuthenticated}
+                        redirectTo={ROUTES.dashboard}
+                        exact
+                        path={ROUTES.login}
+                        render={() => <LoginPage />}
+                      />
+                      <PrivateRoute
+                        allowAccess={isAuthenticated}
+                        redirectTo={ROUTES.login}
+                        exact
+                        path={ROUTES.product}
+                        render={() => <ProductPage />}
+                      />
+                      <Route component={NotFoundPage} />
+                    </Switch>
+                  )}
+                </MainContainer>
+              </VerticalWrapper>
+            </AppContainer>
+          </ApolloProvider>
         )}
         {disableApp && (
           <DisabledAppMessage>
@@ -185,6 +207,7 @@ const mapStateToProps = createSelector(
   makeSelectIsAuthenticated(),
   makeSelectApiUrl(),
   makeSelectIsInitialized(),
+  makeSelectAuthAdmin(),
   (
     isLoading,
     error,
@@ -192,13 +215,15 @@ const mapStateToProps = createSelector(
     isAuthenticated,
     apiUrl,
     isInitialized,
-  ): IAppState => ({
+    authAdmin,
+  ): IAppState | any => ({
     isLoading,
     error,
     disableApp,
     isAuthenticated,
     apiUrl,
     isInitialized,
+    authAdmin,
   }),
 );
 
@@ -215,4 +240,4 @@ const mapDispatchToProps = (dispatch: Dispatch): IAppDispatchProps => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(hocWithSaga({ key, saga: appSaga })(App));
+)(hocWithSaga({ key, saga: appSaga }, { apolloClient })(App));

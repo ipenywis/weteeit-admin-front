@@ -1,4 +1,5 @@
 import { IAppError } from 'types';
+import { IAuthAdmin } from 'containers/loginPage/type';
 
 export interface IAppState {
   isAuthenticated: boolean;
@@ -7,6 +8,7 @@ export interface IAppState {
   disableApp: boolean;
   apiUrl: string;
   isInitialized: boolean;
+  authAdmin: IAuthAdmin | null;
 }
 
 export interface INavigationState {

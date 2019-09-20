@@ -4,6 +4,7 @@ import { ILanguageProviderProps } from 'containers/LanguageProvider';
 import { INavigationState, INavBarState, IAppState } from 'containers/App/type';
 import { ILoginState } from 'containers/loginPage/type';
 import { FormState } from 'final-form';
+import { IProductPageState } from 'containers/productPage/type';
 
 export interface LifeStore extends Store {
   injectedReducers: any;
@@ -38,6 +39,7 @@ export interface ApplicationRootState {
   readonly navBar: INavBarState;
   readonly login: ILoginState;
   readonly finalForm: IFinalForms;
+  readonly productPage: IProductPageState;
 }
 
 export interface IAction {
@@ -48,4 +50,8 @@ export interface IAction {
 export interface IAppError {
   state: 'normal' | 'critical';
   message: string;
+}
+
+export interface IPageProps {
+  disabled?: boolean;
 }

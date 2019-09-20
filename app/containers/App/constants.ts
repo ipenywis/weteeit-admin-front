@@ -42,6 +42,7 @@ export enum ActionTypes {
   AUTHENTICATED = 'app/AUTHENTICATED',
   INIT = 'app/INIT', ///< Bootstrap App
   INITIALIZED = 'app/INITIALIZED',
+  SET_AUTH_ADMIN = 'app/SET_AUTH_ADMIN',
 }
 
 export const MESSAGES = {

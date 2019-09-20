@@ -6,11 +6,13 @@ import {
   Elevation,
 } from '@blueprintjs/core';
 import { theme } from 'styles/styled-components';
+import { AppLoading } from 'components/appLoading';
 
 interface ICardProps extends IBCardProps {
   header?: string;
   large?: boolean;
   standalone?: boolean;
+  loading?: boolean;
 }
 
 const CardContainer = styled(BCard)`
@@ -32,11 +34,15 @@ export class Card extends React.Component<ICardProps> {
   };
 
   render() {
-    const { header } = this.props;
+    const { header, loading } = this.props;
+
+    //const classes = loading ? Classes.SKELETON : '';
+
     return (
       <CardContainer {...this.props}>
         {header && <CardHeader>{header}</CardHeader>}
-        {this.props.children}
+        {loading && <AppLoading size="L" showLoadingText={false} />}
+        {!loading && this.props.children}
       </CardContainer>
     );
   }

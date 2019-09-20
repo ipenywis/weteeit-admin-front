@@ -3,10 +3,9 @@ import { ILoginState } from './type';
 import { ActionTypes } from './constants';
 
 const initialState: ILoginState = {
-  username: '',
-  password: '',
   staySignedIn: false,
   error: null,
+  authAdmin: null,
 };
 
 export default function LoginReducer(

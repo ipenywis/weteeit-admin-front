@@ -6,6 +6,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
+  overflow: auto;
 `;
 
 export default PageContainer;

@@ -64,6 +64,7 @@ const AppContainer = styled.div`
   flex-direction: row;
   padding: 0;
   margin: 0;
+  overflow: auto;
 `;
 
 const MainContainer = styled.div`

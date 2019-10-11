@@ -22,11 +22,12 @@ function InputGroup(props: PropsType) {
   if (props.useNormalForm)
     return (
       <Field name={props.name} initialValue={props.initialValue}>
-        {({ input, meta: { error, touched } }) =>
+        {({ input, meta: { error, touched, submitError } }) =>
           React.cloneElement(primitiveInput, {
             ...input,
             ...props,
-            intent: touched && error ? Intent.DANGER : props.intent,
+            intent:
+              touched && (error || submitError) ? Intent.DANGER : props.intent,
           })
         }
       </Field>

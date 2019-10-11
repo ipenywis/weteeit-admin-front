@@ -55,3 +55,6 @@ export interface IAppError {
 export interface IPageProps {
   disabled?: boolean;
 }
+
+export type WithOptional<T, K extends keyof T> = Omit<T, K> &
+  Partial<Pick<T, K>>;

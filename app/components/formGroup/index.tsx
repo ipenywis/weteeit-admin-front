@@ -22,11 +22,15 @@ function FormGroup(props: IFormGroupProps) {
   if (props.name)
     return (
       <Field name={props.name}>
-        {({ meta: { error, touched } }) =>
+        {({ meta: { error, touched, submitError } }) =>
           React.cloneElement(primitiveFormGroup, {
             ...props,
-            intent: touched && error ? Intent.DANGER : props.intent,
-            helperText: touched && error ? error : props.helperText,
+            intent:
+              touched && (error || submitError) ? Intent.DANGER : props.intent,
+            helperText:
+              touched && (error || submitError)
+                ? error || submitError
+                : props.helperText,
           })
         }
       </Field>

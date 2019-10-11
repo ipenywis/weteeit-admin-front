@@ -1,5 +1,7 @@
 export interface IProductPageState {
   isLoading: boolean;
+  activeProductType: ProductTypes;
+  products: IProduct[];
 }
 
 export enum ProductTypes {
@@ -21,7 +23,7 @@ export const ProductTypesValues = {
 };
 
 export interface IProduct {
-  id: number;
+  id?: number;
   name: string;
   type: ProductTypes;
   available: boolean;

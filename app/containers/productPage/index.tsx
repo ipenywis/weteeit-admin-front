@@ -8,6 +8,7 @@ import { makeSelectAuthAdmin } from 'containers/App/selectors';
 import { IAuthAdmin } from 'containers/loginPage/type';
 import Products from './products';
 import { ApolloConsumer } from '@apollo/react-hooks';
+import { AddNewProduct } from './addNewProduct';
 
 interface IProductPageProps {
   authAdmin: IAuthAdmin;
@@ -20,6 +21,12 @@ function ProductPage(props: IProductPageProps) {
         <PageContainer>
           <PageHeader header="Product" subHeader="Manage Products" />
           <Products apolloClient={client} />
+          <AddNewProduct
+            apolloClient={client}
+            name="addProduct"
+            header="Add new Product"
+            submitButtonText="Add"
+          />
         </PageContainer>
       )}
     </ApolloConsumer>

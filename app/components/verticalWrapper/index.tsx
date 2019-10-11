@@ -5,7 +5,7 @@ interface IVerticalWrapperProps {
   width?: string;
   height?: string;
   style?: React.CSSProperties;
-  children?: any[];
+  children?: any | any[];
 }
 
 const VerticalContainer = styled.div`

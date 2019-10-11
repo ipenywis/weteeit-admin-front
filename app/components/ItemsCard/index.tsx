@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Card } from 'components/card';
 import { HorizontalWrapper } from 'components/horizontalWrapper';
 import { theme } from 'styles/styled-components';
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import { MenuItem, Button } from '@blueprintjs/core';
+import { Button, Overlay, Intent, Classes } from '@blueprintjs/core';
+import { ListDropdown } from 'components/listDropdown';
 
 export interface IBaseItem {
   name: string;
@@ -18,6 +18,10 @@ export interface IItemsCardProps<T extends IBaseItem> {
   dropdownItems?: string[];
   noItemsMessage?: string;
   loading?: boolean;
+  activeDropdownItem?: string;
+
+  updateCard?: JSX.Element;
+  deleteAlert?: JSX.Element;
 
   onDropdownItemSelect?: (
     item: string,
@@ -44,7 +48,7 @@ const Item = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 3em;
+  height: 3.2em;
   background-color: ${theme.default.itemBackground};
   padding: 20px;
   margin-bottom: 1em;
@@ -73,20 +77,65 @@ const ItemName = styled.div`
   margin-right: 2em;
 `;
 
-const itemListRenderer: ItemRenderer<string> = (
+const StyledOverlay = styled(Overlay as any)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ControlContainer = styled.div`
+  margin-right: 10px;
+
+  &:last-of-type {
+    margin-right: 0px;
+  }
+`;
+
+function UpdateItem<T>({
+  updateCard,
   item,
-  { handleClick, modifiers },
-) => {
-  console.log('In renderer: ', item);
+}: {
+  updateCard: JSX.Element;
+  item: T;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleOverlay = () => {
+    setIsOpen(prevValue => !prevValue);
+  };
 
   return (
-    <MenuItem
-      active={modifiers.active}
-      key={item}
-      onClick={handleClick}
-      text={item}
-      label={item}
-    />
+    <ControlContainer>
+      <Button icon="edit" intent={Intent.PRIMARY} onClick={toggleOverlay} />
+      <StyledOverlay
+        isOpen={isOpen}
+        onClose={toggleOverlay}
+        className={Classes.OVERLAY_SCROLL_CONTAINER}
+        canOutsideClickClose={false}
+        canEscapeKeyClose
+        transitionDuration={50}
+      >
+        {React.cloneElement(updateCard, {
+          onCloseButtonClick: toggleOverlay,
+          currentItem: item,
+        })}
+      </StyledOverlay>
+    </ControlContainer>
+  );
+}
+
+const DeleteItem = ({ deleteAlert }: { deleteAlert: JSX.Element }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <ControlContainer>
+      <Button
+        icon="trash"
+        intent={Intent.DANGER}
+        onClick={() => setIsOpen(true)}
+      />
+      {deleteAlert && React.cloneElement(deleteAlert, { isOpen, setIsOpen })}
+    </ControlContainer>
   );
 };
 
@@ -100,22 +149,20 @@ export default function ItemsCard<T extends IBaseItem>(
     loading,
     dropdownItems,
     onDropdownItemSelect,
+    activeDropdownItem,
+    updateCard,
+    deleteAlert,
   } = props;
 
   const isItemsValid = items && items.length > 0;
 
-  console.log('Bnti: ', dropdownItems);
-
   return (
     <FlexCard header={header} interactive loading={loading}>
-      <Select
-        items={dropdownItems as any}
-        itemRenderer={itemListRenderer}
-        onItemSelect={onDropdownItemSelect as any}
-        filterable={false}
-      >
-        <Button icon="tag" text={dropdownItems && dropdownItems[0]} />
-      </Select>
+      <ListDropdown
+        dropdownItems={dropdownItems as any}
+        onDropdownItemSelect={onDropdownItemSelect}
+        activeDropdownItem={activeDropdownItem}
+      />
       {!isItemsValid && <b>{noItemsMessage || 'No Items Available!'}</b>}
       {isItemsValid &&
         (items as T[]).map((item, idx) => {
@@ -128,7 +175,12 @@ export default function ItemsCard<T extends IBaseItem>(
                 </ItemLogo>
                 <ItemName>{item.name}</ItemName>
               </LeftSide>
-              <RightSide />
+              <RightSide>
+                {updateCard && (
+                  <UpdateItem updateCard={updateCard} item={item} />
+                )}
+                {deleteAlert && <DeleteItem deleteAlert={deleteAlert} />}
+              </RightSide>
             </Item>
           );
         })}

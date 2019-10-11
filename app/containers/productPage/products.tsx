@@ -2,8 +2,13 @@ import React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { IProduct, ProductTypesValues } from './type';
-import { setProducts, setloading, clearLoading } from './actions';
+import { IProduct, ProductTypesValues, ProductTypes } from './type';
+import {
+  setProducts,
+  setloading,
+  clearLoading,
+  setActiveType,
+} from './actions';
 import {
   activateGlobalLoading,
   disableGlobalLoading,
@@ -14,9 +19,15 @@ import { AppToaster } from 'components/toaster';
 import { Intent } from '@blueprintjs/core';
 import productsSaga from './saga';
 import hocWithSaga from 'utils/injectSaga';
-import { makeSelectIsLoading } from './selectors';
-import { wait } from 'utils/common';
+import {
+  makeSelectIsLoading,
+  makeSelectActiveProductType,
+  makeSelectProducts,
+} from './selectors';
+import { isProductType } from 'utils/common';
 import ItemsCard from 'components/ItemsCard';
+import ProductForm from './productForm';
+import { DeleteProductAlert } from './deleteProduct';
 
 interface IDispatchProps {
   setProducts: (products: IProduct[]) => void;
@@ -24,10 +35,13 @@ interface IDispatchProps {
   disableGlobalLoading: () => void;
   setLoading: () => void;
   clearLoading: () => void;
+  setActiveType: (type: ProductTypes) => void;
 }
 
 export interface IStateProps {
+  products: IProduct[];
   isLoading: boolean;
+  activeProductType: string;
 }
 
 export interface IProductsProps {
@@ -45,41 +59,61 @@ class Products extends React.Component<
     this.loadProducts();
   }
 
-  async loadProducts() {
-    const { apolloClient } = this.props;
+  async loadProducts(type?: ProductTypes) {
+    const { apolloClient, activeProductType } = this.props;
 
     //Start Loading
     this.props.setLoading();
 
     const queryVariables = {
-      type: 'tshirt',
+      type: type ? type.toLowerCase() : activeProductType.toLowerCase(),
       pageId: 1,
       limitPerPage: 10,
     };
 
-    const productsWithDefaultType = await apolloClient
+    const productsWithType = await apolloClient
       .query({ query: GET_PRODUCTS_BY_TYPE, variables: queryVariables })
-      .catch(err => {
-        this.props.disableGlobalLoading();
-        AppToaster.show({
-          message: 'Error, Cannot Load Products at the moment',
-          intent: Intent.DANGER,
-        });
+      .catch(err => {});
+
+    if (!productsWithType) {
+      this.props.disableGlobalLoading();
+      AppToaster.show({
+        message: 'Error, Cannot Load Products at the moment',
+        intent: Intent.DANGER,
       });
+      return false;
+    }
 
-    console.log('Response: ', productsWithDefaultType);
+    const products = productsWithType.data.productsWithPagination.products;
+    const pagination = productsWithType.data.productsWithPagination.pagination;
 
-    await wait();
+    console.log('Products: ', products);
+    console.log('Pagination: ', pagination);
+
+    this.props.setProducts(products);
 
     this.props.clearLoading();
+
+    return true;
+  }
+
+  onProductTypeSelect(type: string) {
+    const productType: ProductTypes = isProductType(type);
+    this.props.setActiveType(productType);
+    //Load Products with specified type
+    this.loadProducts(productType);
+  }
+
+  async updateProduct(product: IProduct) {
+    //const storedProduct: ApolloQueryResult<IProduct> = await this.props.apolloClient.query(STORE_)
   }
 
   render() {
     if (this.props.disabled) return null;
 
-    const { isLoading } = this.props;
+    const { isLoading, activeProductType, products, apolloClient } = this.props;
 
-    const products: IProduct[] = [];
+    console.log('Props: ', this.props);
 
     return (
       <ItemsCard
@@ -88,7 +122,20 @@ class Products extends React.Component<
         loading={isLoading}
         noItemsMessage="No Products Found"
         dropdownItems={Object.values(ProductTypesValues)}
-        onDropdownItemSelect={v => console.log('Item: ', v)}
+        onDropdownItemSelect={this.onProductTypeSelect.bind(this)}
+        activeDropdownItem={activeProductType.toLocaleLowerCase()}
+        deleteAlert={<DeleteProductAlert />}
+        updateCard={
+          <ProductForm
+            apolloClient={apolloClient}
+            header="Update Product"
+            name="updateProduct"
+            elevated
+            submitButtonText="Update"
+            showCloseButton
+            onSubmit={this.updateProduct.bind(this)}
+          />
+        }
       />
     );
   }
@@ -118,9 +165,13 @@ class Products extends React.Component<
 */
 
 const mapStateToProps = createSelector(
+  makeSelectProducts(),
   makeSelectIsLoading(),
-  isLoading => ({
+  makeSelectActiveProductType(),
+  (products, isLoading, activeProductType) => ({
+    products,
     isLoading,
+    activeProductType,
   }),
 );
 
@@ -130,6 +181,7 @@ const mapDispatchToProps = (dispatch: Dispatch): IDispatchProps => ({
   disableGlobalLoading: () => dispatch(disableGlobalLoading()),
   setLoading: () => dispatch(setloading()),
   clearLoading: () => dispatch(clearLoading()),
+  setActiveType: (type: ProductTypes) => dispatch(setActiveType(type)),
 });
 
 export default connect<IStateProps, IDispatchProps>(

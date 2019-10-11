@@ -10,6 +10,10 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
   }
 
+  html, body {
+    overflow: auto;
+  }
+
   body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }

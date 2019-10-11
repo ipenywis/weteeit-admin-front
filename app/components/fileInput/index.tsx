@@ -21,7 +21,7 @@ function FileInput(props: IFileInputPropsType) {
   const primitiveInput = <BFileInput />;
 
   const defaultInputText = 'Choose a File...';
-  const [inputText, setInputText] = useState(defaultInputText);
+  const [inputText, setInputText] = useState(props.text || defaultInputText);
 
   const showFileError = () => {
     AppToaster.show({
@@ -49,7 +49,7 @@ function FileInput(props: IFileInputPropsType) {
 
   if (props.useNormalForm)
     return (
-      <Field name={props.name}>
+      <Field name={props.name} initialValue={props.initialValue}>
         {({ input }) => {
           return React.cloneElement(primitiveInput, {
             ...props,

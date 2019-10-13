@@ -15,6 +15,8 @@ const FinalFormContainer = styled.div``;
 export interface IFormProps extends FormProps {
   className?: string;
   formRef?: React.LegacyRef<HTMLFormElement>;
+  resetOnSuccessfulSubmit?: boolean;
+
   children: (...args: any) => JSX.Element | any;
 }
 
@@ -22,7 +24,9 @@ export interface IFormProps extends FormProps {
  * Use children render props to render Final Form
  * @param props
  */
-export function Form(props: IFormProps) {
+function Form(props: IFormProps) {
+  const { resetOnSuccessfulSubmit } = props;
+
   return (
     <FinalFormContainer className={props.className}>
       <FinalForm
@@ -30,9 +34,11 @@ export function Form(props: IFormProps) {
         render={(renderProps: FormRenderProps) => (
           <FormContainer
             onSubmit={event =>
-              (renderProps.handleSubmit(event) as Promise<any>).then(
-                renderProps.form.reset,
-              )
+              resetOnSuccessfulSubmit
+                ? (renderProps.handleSubmit(event) as Promise<any>).then(
+                    renderProps.form.reset,
+                  )
+                : renderProps.handleSubmit(event)
             }
             ref={props.formRef as any}
           >
@@ -43,3 +49,9 @@ export function Form(props: IFormProps) {
     </FinalFormContainer>
   );
 }
+
+Form.defaultProps = {
+  resetOnSuccessfulSubmit: true,
+};
+
+export { Form };

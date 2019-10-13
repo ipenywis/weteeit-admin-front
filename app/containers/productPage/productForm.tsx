@@ -32,6 +32,7 @@ export interface IProductFormProps {
   elevated?: boolean;
   showCloseButton?: boolean;
   apolloClient: ApolloClient<any>;
+  resetOnSuccessfulSubmit?: boolean;
 
   /**
    * provide only when using as an Update Form
@@ -75,6 +76,7 @@ function ProductForm(
     currentItem,
     submitButtonText,
     showCloseButton,
+    resetOnSuccessfulSubmit,
   } = props;
 
   const productTypes = Object.values(ProductTypesValues);
@@ -89,7 +91,30 @@ function ProductForm(
     setProductType(productType.toLowerCase());
   };
 
-  const onSubmit = async values => {
+  const productExists = async (
+    submittedProduct: IProduct,
+    errors: any = {},
+  ) => {
+    //Check if product name already exists (Unique Constraint)
+    const productExistsResult = await props.apolloClient
+      .query({
+        query: PRODUCT_EXISTS,
+        variables: { name: submittedProduct.name },
+      })
+      .catch(err => {
+        errors.name = 'Cannot check name validity, please try again later';
+        Promise.resolve(errors);
+      });
+
+    if (productExistsResult) {
+      if (productExistsResult.data.exists) {
+        errors.name = 'Name already exists';
+        Promise.resolve(errors);
+      }
+    }
+  };
+
+  const onSubmit = async (values, currentItem?: IProduct) => {
     //TODO: Add image storing on nutsCDN
     const submittedProduct: IProduct = {
       id: currentItem && currentItem.id,
@@ -101,24 +126,11 @@ function ProductForm(
     };
 
     //Errors Object
-    const errors: any = {};
+    let errors: any = {};
 
-    //Check if product name already exists (Unique Constraint)
-    const productExistsResult = await props.apolloClient
-      .query({
-        query: PRODUCT_EXISTS,
-        variables: { name: submittedProduct.name },
-      })
-      .catch(err => {
-        errors.name = 'Cannot check name validity, please try again later';
-      });
-
-    if (productExistsResult) {
-      if (productExistsResult.data.exists) {
-        errors.name = 'Name already exists';
-        return errors;
-      }
-    }
+    //NOTE: Only check if product exists when name doesnt match currentItem's name (possibly updating product)
+    if (currentItem && submittedProduct.name.trim() !== currentItem.name)
+      errors = await productExists(submittedProduct, errors);
 
     props.onSubmit(submittedProduct);
 
@@ -136,9 +148,10 @@ function ProductForm(
       onCloseButtonClick={onCloseButtonClick}
     >
       <Form
-        onSubmit={onSubmit}
+        onSubmit={(values: any) => onSubmit(values, currentItem)}
         validate={validateForm}
         initialValues={{ available: isProductAvailable }}
+        resetOnSuccessfulSubmit={resetOnSuccessfulSubmit}
       >
         {(props: FormRenderProps) => {
           return (
@@ -178,9 +191,7 @@ function ProductForm(
                 <ListDropdown
                   dropdownItems={productTypes}
                   onDropdownItemSelect={onProductTypeSelect}
-                  activeDropdownItem={
-                    currentItem ? currentItem.type : productType
-                  }
+                  activeDropdownItem={productType}
                   disabled={!props.values.available}
                 />
               </FormGroup>
@@ -215,7 +226,9 @@ function ProductForm(
                     text={submitButtonText}
                     intent={Intent.SUCCESS}
                     disabled={
-                      props.submitting || props.pristine || !props.dirty
+                      currentItem &&
+                      currentItem.type === productType &&
+                      (props.submitting || props.pristine || !props.dirty)
                     }
                   />
                 </FormGroup>

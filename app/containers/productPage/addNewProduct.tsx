@@ -1,46 +1,74 @@
 import React from 'react';
 import ProductForm, { IProductFormProps } from './productForm';
 import { ApolloClient } from 'apollo-boost';
-import { STORE_PRODUCT } from './queries';
-import { IProduct } from './type';
+import { STORE_PRODUCT } from './mutations';
+import { IProduct, ProductTypes } from './type';
 import { AppToaster } from 'components/toaster';
 import { Intent } from '@blueprintjs/core';
 import { WithOptional } from 'types';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { setActiveType } from './actions';
+
+interface IDispatchProps {
+  setActiveType: (type: ProductTypes) => void;
+}
 
 export interface IAddNewProductProps
   extends WithOptional<IProductFormProps, 'onSubmit'> {
   apolloClient: ApolloClient<any>;
+
+  loadProducts: (apolloClient: ApolloClient<any>, type?: ProductTypes) => void;
 }
 
-export class AddNewProduct extends React.Component<IAddNewProductProps> {
+class AddNewProduct extends React.Component<
+  IAddNewProductProps & IDispatchProps
+> {
   async addNewProduct(product: IProduct) {
-    console.log('Product to store: ', product);
     const storedProduct = await this.props.apolloClient
       .mutate({
         mutation: STORE_PRODUCT,
         variables: { ...product, type: product.type.toLowerCase() },
       })
       .catch(err => {
-        console.log('ApolloError: ', JSON.stringify(err));
-        err.graphQLErrors.map(gqErr => {
-          console.log('GqErr: ', gqErr);
-        });
+        err.graphQLErrors.map(gqErr => {});
         AppToaster.show({
           message: 'Cannot Save Product, Please Try again later',
           intent: Intent.DANGER,
         });
       });
 
-    if (storedProduct)
+    if (storedProduct) {
       AppToaster.show({
         message: 'Product Saved Successfully',
         intent: Intent.SUCCESS,
       });
+
+      //Set Current Product Type as Active Type
+      this.props.setActiveType(product.type);
+      //Re-Fetch Products
+      this.props.loadProducts(this.props.apolloClient, product.type);
+    }
   }
 
   render() {
     return (
-      <ProductForm {...this.props} onSubmit={this.addNewProduct.bind(this)} />
+      <ProductForm
+        {...this.props}
+        onSubmit={this.addNewProduct.bind(this)}
+        resetOnSuccessfulSubmit
+      />
     );
   }
 }
+
+const mapStateToProps = () => {};
+
+const mapDispatchToProps = (dispatch: Dispatch): IDispatchProps => ({
+  setActiveType: (type: ProductTypes) => dispatch(setActiveType(type)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddNewProduct);

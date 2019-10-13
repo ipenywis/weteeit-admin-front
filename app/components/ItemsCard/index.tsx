@@ -124,7 +124,13 @@ function UpdateItem<T>({
   );
 }
 
-const DeleteItem = ({ deleteAlert }: { deleteAlert: JSX.Element }) => {
+function DeleteItem<T>({
+  item,
+  deleteAlert,
+}: {
+  item: T;
+  deleteAlert: JSX.Element;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -134,10 +140,15 @@ const DeleteItem = ({ deleteAlert }: { deleteAlert: JSX.Element }) => {
         intent={Intent.DANGER}
         onClick={() => setIsOpen(true)}
       />
-      {deleteAlert && React.cloneElement(deleteAlert, { isOpen, setIsOpen })}
+      {deleteAlert &&
+        React.cloneElement(deleteAlert, {
+          isOpen,
+          setIsOpen,
+          currentItem: item,
+        })}
     </ControlContainer>
   );
-};
+}
 
 export default function ItemsCard<T extends IBaseItem>(
   props: IItemsCardProps<T>,
@@ -177,9 +188,11 @@ export default function ItemsCard<T extends IBaseItem>(
               </LeftSide>
               <RightSide>
                 {updateCard && (
-                  <UpdateItem updateCard={updateCard} item={item} />
+                  <UpdateItem item={item} updateCard={updateCard} />
                 )}
-                {deleteAlert && <DeleteItem deleteAlert={deleteAlert} />}
+                {deleteAlert && (
+                  <DeleteItem item={item} deleteAlert={deleteAlert} />
+                )}
               </RightSide>
             </Item>
           );

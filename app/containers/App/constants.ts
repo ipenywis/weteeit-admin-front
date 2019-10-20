@@ -22,9 +22,13 @@ export const NavigationItems = {
     name: 'Dashboard',
     path: ROUTES.dashboard,
   },
-  match: {
+  product: {
     name: 'Product',
     path: ROUTES.product,
+  },
+  order: {
+    name: 'Order',
+    path: ROUTES.order,
   },
 };
 

@@ -56,6 +56,7 @@ import { apolloClient } from './graphqlSetup';
 import { makeSelectAuthAdmin } from './selectors';
 import { IAuthAdmin } from 'containers/loginPage/type';
 import ProductPage from 'containers/productPage';
+import { OrderPage } from 'containers/orderPage';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -179,6 +180,13 @@ class App extends React.Component<IAppProps> {
                         exact
                         path={ROUTES.product}
                         render={() => <ProductPage />}
+                      />
+                      <PrivateRoute
+                        allowAccess={isAuthenticated}
+                        redirectTo={ROUTES.login}
+                        exact
+                        path={ROUTES.order}
+                        render={() => <OrderPage />}
                       />
                       <Route component={NotFoundPage} />
                     </Switch>

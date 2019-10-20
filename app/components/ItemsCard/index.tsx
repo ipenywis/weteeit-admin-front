@@ -8,8 +8,8 @@ import { ListDropdown } from 'components/listDropdown';
 
 export interface IBaseItem {
   name: string;
-  imageUrl: string;
-  price: number;
+  imageUrl?: string;
+  price?: number;
 }
 
 export interface IItemsCardProps<T extends IBaseItem> {
@@ -22,6 +22,7 @@ export interface IItemsCardProps<T extends IBaseItem> {
 
   updateCard?: JSX.Element;
   deleteAlert?: JSX.Element;
+  infoCard?: JSX.Element;
 
   onDropdownItemSelect?: (
     item: string,
@@ -77,6 +78,13 @@ const ItemName = styled.div`
   margin-right: 2em;
 `;
 
+const ItemPrice = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 2em;
+  color: ${theme.default.muted};
+`;
+
 const StyledOverlay = styled(Overlay as any)`
   display: flex;
   justify-content: center;
@@ -106,7 +114,7 @@ function UpdateItem<T>({
 
   return (
     <ControlContainer>
-      <Button icon="edit" intent={Intent.PRIMARY} onClick={toggleOverlay} />
+      <Button icon="edit" intent={Intent.WARNING} onClick={toggleOverlay} />
       <StyledOverlay
         isOpen={isOpen}
         onClose={toggleOverlay}
@@ -150,6 +158,39 @@ function DeleteItem<T>({
   );
 }
 
+function ItemInfo<T>({ item, infoCard }: { item: T; infoCard: JSX.Element }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleOverlay = () => {
+    setIsOpen(prevIsOpen => !prevIsOpen);
+  };
+
+  return (
+    <ControlContainer>
+      <Button
+        icon="info-sign"
+        intent={Intent.PRIMARY}
+        onClick={toggleOverlay}
+      />
+      {infoCard && (
+        <StyledOverlay
+          isOpen={isOpen}
+          onClose={toggleOverlay}
+          className={Classes.OVERLAY_SCROLL_CONTAINER}
+          canOutsideClickClose={false}
+          canEscapeKeyClose
+          transitionDuration={50}
+        >
+          {React.cloneElement(infoCard, {
+            onCloseButtonClick: toggleOverlay,
+            currentItem: item,
+          })}
+        </StyledOverlay>
+      )}
+    </ControlContainer>
+  );
+}
+
 export default function ItemsCard<T extends IBaseItem>(
   props: IItemsCardProps<T>,
 ) {
@@ -163,6 +204,7 @@ export default function ItemsCard<T extends IBaseItem>(
     activeDropdownItem,
     updateCard,
     deleteAlert,
+    infoCard,
   } = props;
 
   const isItemsValid = items && items.length > 0;
@@ -181,12 +223,16 @@ export default function ItemsCard<T extends IBaseItem>(
           return (
             <Item key={itemKey}>
               <LeftSide>
-                <ItemLogo>
-                  <img src={item.imageUrl} alt="item-image" />
-                </ItemLogo>
+                {item.imageUrl && (
+                  <ItemLogo>
+                    <img src={item.imageUrl} alt="item-image" />
+                  </ItemLogo>
+                )}
                 <ItemName>{item.name}</ItemName>
+                {item.price && <ItemPrice>{item.price}</ItemPrice>}
               </LeftSide>
               <RightSide>
+                {infoCard && <ItemInfo item={item} infoCard={infoCard} />}
                 {updateCard && (
                   <UpdateItem item={item} updateCard={updateCard} />
                 )}

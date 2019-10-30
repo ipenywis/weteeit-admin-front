@@ -208,14 +208,17 @@ export default function ItemsCard<T extends IBaseItem>(
   } = props;
 
   const isItemsValid = items && items.length > 0;
+  const isDropDownValid = dropdownItems && dropdownItems.length > 0;
 
   return (
     <FlexCard header={header} interactive loading={loading}>
-      <ListDropdown
-        dropdownItems={dropdownItems as any}
-        onDropdownItemSelect={onDropdownItemSelect}
-        activeDropdownItem={activeDropdownItem}
-      />
+      {isDropDownValid && (
+        <ListDropdown
+          dropdownItems={dropdownItems as any}
+          onDropdownItemSelect={onDropdownItemSelect}
+          activeDropdownItem={activeDropdownItem}
+        />
+      )}
       {!isItemsValid && <b>{noItemsMessage || 'No Items Available!'}</b>}
       {isItemsValid &&
         (items as T[]).map((item, idx) => {

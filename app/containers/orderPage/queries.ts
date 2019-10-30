@@ -15,3 +15,27 @@ export const GET_ORDERS = gql`
     }
   }
 `;
+
+export const GET_ORDER_PRODUCTS = gql`
+  query GET_ORDER_PRODUCTS($orderId: Int!) {
+    orderProducts(id: $orderId) {
+      product {
+        id
+        available
+        name
+        price
+        type
+        imageUrl
+      }
+      quantity
+    }
+  }
+`;
+
+export const GET_SHIPPING = gql`
+  query GET_SHIPPING($wilaya: String!) {
+    shipping(wilaya: $wilaya) {
+      price
+    }
+  }
+`;

@@ -24,6 +24,7 @@ export const theme = {
     itemBackground: '#f7f7f7',
     danger: '#e74c3c',
     semiDanger: '#db373730',
+    success: '#27ae60',
   },
 };
 

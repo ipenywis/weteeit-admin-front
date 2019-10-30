@@ -1,3 +1,5 @@
+import { IProduct } from 'containers/productPage/type';
+
 export interface IOrderPageState {
   isOrdersLoading: boolean;
   orders: IOrder[];
@@ -14,4 +16,9 @@ export interface IOrder {
   wilaya: string;
   city: string;
   instructions: string;
+}
+
+export interface IProductWithQuantity {
+  product: IProduct;
+  quantity: number;
 }

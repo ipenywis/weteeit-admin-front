@@ -2,7 +2,7 @@ import React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import ItemsCard from 'components/ItemsCard';
-import { ProductTypesValues, ProductTypes } from 'containers/productPage/type';
+import { ProductTypes } from 'containers/productPage/type';
 import { createSelector } from 'reselect';
 import { makeSelectOrders, makeSelectIsOrdersLoading } from './selectors';
 import { IOrder } from './type';
@@ -80,9 +80,8 @@ class Orders extends React.Component<
         header="Awaiting Orders"
         items={ordersWithInfo}
         noItemsMessage="No Orders Found"
-        dropdownItems={Object.values(ProductTypesValues)}
         loading={isOrdersLoading}
-        infoCard={<OrderInfo />}
+        infoCard={<OrderInfo apolloClient={this.props.apolloClient} />}
       />
     );
   }

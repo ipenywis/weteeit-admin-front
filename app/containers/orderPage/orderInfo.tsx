@@ -206,7 +206,9 @@ export default function OrderInfo(props: IOrderInfoProps) {
       <Title>Facebook Profile</Title>
       <Text>{currentItem.facebook_profile || 'No Facebook provided'}</Text>
       <Title>Wilaya</Title>
-      <Text>{currentItem.wilaya}</Text>
+      <Text>
+        {currentItem.wilaya} ({shippingPrice}DZD)
+      </Text>
       <Title>City</Title>
       <Text>{currentItem.city}</Text>
       <Title>Buyer Instructions</Title>
@@ -215,7 +217,7 @@ export default function OrderInfo(props: IOrderInfoProps) {
       {shippingPrice && (
         <>
           <HorizontalWrapper noMargin>
-            <Text>{totalPrice} </Text>
+            <Text>{totalPrice}</Text>
             <Text> + </Text>
             <Text>({shippingPrice} shipping)</Text>
           </HorizontalWrapper>

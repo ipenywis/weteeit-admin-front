@@ -16,6 +16,7 @@ export interface IOrder {
   wilaya: string;
   city: string;
   instructions: string;
+  shipped?: boolean;
 }
 
 export interface IProductWithQuantity {

@@ -10,6 +10,7 @@ export const GET_ORDERS = gql`
       lastName
       phone
       city
+      shipped
       facebook_profile
       instructions
     }

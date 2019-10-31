@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Card } from 'components/card';
 import { HorizontalWrapper } from 'components/horizontalWrapper';
 import { theme } from 'styles/styled-components';
-import { Button, Overlay, Intent, Classes } from '@blueprintjs/core';
+import { Button, Overlay, Intent, Classes, IconName } from '@blueprintjs/core';
 import { ListDropdown } from 'components/listDropdown';
 
 export interface IBaseItem {
@@ -23,7 +23,11 @@ export interface IItemsCardProps<T extends IBaseItem> {
   updateCard?: JSX.Element;
   deleteAlert?: JSX.Element;
   infoCard?: JSX.Element;
+  customAlert?: JSX.Element;
+  customAlertIcon?: IconName;
+  customAlertIntent?: Intent;
 
+  filterItems?: (item: T) => boolean;
   onDropdownItemSelect?: (
     item: string,
     e: React.SyntheticEvent<any, Event>,
@@ -158,6 +162,36 @@ function DeleteItem<T>({
   );
 }
 
+function CustomAlert<T>({
+  item,
+  customAlert,
+  alertIcon,
+  alertIntent,
+}: {
+  item: T;
+  customAlert?: JSX.Element;
+  alertIcon?: IconName;
+  alertIntent?: Intent;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <ControlContainer>
+      <Button
+        icon={alertIcon}
+        intent={alertIntent}
+        onClick={() => setIsOpen(true)}
+      />
+      {customAlert &&
+        React.cloneElement(customAlert, {
+          isOpen,
+          setIsOpen,
+          currentItem: item,
+        })}
+    </ControlContainer>
+  );
+}
+
 function ItemInfo<T>({ item, infoCard }: { item: T; infoCard: JSX.Element }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -205,6 +239,9 @@ export default function ItemsCard<T extends IBaseItem>(
     updateCard,
     deleteAlert,
     infoCard,
+    customAlert,
+    customAlertIcon,
+    customAlertIntent,
   } = props;
 
   const isItemsValid = items && items.length > 0;
@@ -222,6 +259,8 @@ export default function ItemsCard<T extends IBaseItem>(
       {!isItemsValid && <b>{noItemsMessage || 'No Items Available!'}</b>}
       {isItemsValid &&
         (items as T[]).map((item, idx) => {
+          //Filter Items rendering if defined
+          if (props.filterItems && !props.filterItems(item)) return null;
           const itemKey = `${item.name}-${idx}`;
           return (
             <Item key={itemKey}>
@@ -235,6 +274,14 @@ export default function ItemsCard<T extends IBaseItem>(
                 {item.price && <ItemPrice>{item.price}</ItemPrice>}
               </LeftSide>
               <RightSide>
+                {customAlert && (
+                  <CustomAlert
+                    item={item}
+                    customAlert={customAlert}
+                    alertIntent={customAlertIntent}
+                    alertIcon={customAlertIcon}
+                  />
+                )}
                 {infoCard && <ItemInfo item={item} infoCard={infoCard} />}
                 {updateCard && (
                   <UpdateItem item={item} updateCard={updateCard} />

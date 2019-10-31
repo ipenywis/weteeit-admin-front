@@ -17,6 +17,7 @@ import {
 } from './actions';
 import { makeSelectActiveProductType } from 'containers/productPage/selectors';
 import OrderInfo from './orderInfo';
+import { OrderShippedAlert } from './orderShippedAlert';
 
 export interface IOrdersProps {
   apolloClient: ApolloClient<any>;
@@ -55,8 +56,6 @@ class Orders extends React.Component<
         });
       });
 
-    console.log('Orders Response: ', ordersResponse);
-
     if (ordersResponse) {
       if (ordersResponse.data) {
         this.props.setOrders(ordersResponse.data.orders);
@@ -82,6 +81,12 @@ class Orders extends React.Component<
         noItemsMessage="No Orders Found"
         loading={isOrdersLoading}
         infoCard={<OrderInfo apolloClient={this.props.apolloClient} />}
+        customAlert={
+          <OrderShippedAlert loadOrders={this.loadOrders.bind(this)} />
+        }
+        customAlertIcon="tick"
+        customAlertIntent="success"
+        filterItems={item => !item.shipped}
       />
     );
   }

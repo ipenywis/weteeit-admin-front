@@ -8,6 +8,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   font-family: 'Open Sans', sans-serif;
+  margin-bottom: 15px;
 `;
 
 const SubHeaderText = styled.div`

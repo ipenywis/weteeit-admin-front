@@ -271,7 +271,7 @@ export default function ItemsCard<T extends IBaseItem>(
                   </ItemLogo>
                 )}
                 <ItemName>{item.name}</ItemName>
-                {item.price && <ItemPrice>{item.price}</ItemPrice>}
+                {item.price && <ItemPrice>{item.price}DZD</ItemPrice>}
               </LeftSide>
               <RightSide>
                 {customAlert && (

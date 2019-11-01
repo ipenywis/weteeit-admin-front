@@ -32,6 +32,7 @@ class Shippings extends React.Component<
 
     const shippingsItems: { name: string }[] = shippings.map(s => ({
       name: s.wilaya,
+      price: s.price,
     }));
 
     return (

@@ -57,6 +57,7 @@ import { makeSelectAuthAdmin } from './selectors';
 import { IAuthAdmin } from 'containers/loginPage/type';
 import ProductPage from 'containers/productPage';
 import { OrderPage } from 'containers/orderPage';
+import ShippingPage from 'containers/shippingPage';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -187,6 +188,13 @@ class App extends React.Component<IAppProps> {
                         exact
                         path={ROUTES.order}
                         render={() => <OrderPage />}
+                      />
+                      <PrivateRoute
+                        allowAccess={isAuthenticated}
+                        redirectTo={ROUTES.login}
+                        exact
+                        path={ROUTES.shipping}
+                        render={() => <ShippingPage />}
                       />
                       <Route component={NotFoundPage} />
                     </Switch>

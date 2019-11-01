@@ -4,6 +4,7 @@ export const ROUTES = {
   profile: '/profile',
   product: '/product',
   order: '/order',
+  shipping: '/shipping',
   login: '/login',
   resetPassword: '/password-reset',
 };

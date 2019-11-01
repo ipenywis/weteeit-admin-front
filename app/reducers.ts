@@ -14,6 +14,7 @@ import AppReducer from 'containers/App/reducer';
 import LoginReducer from 'containers/loginPage/reducer';
 import ProductPageReducer from 'containers/productPage/reducer';
 import OrderPageReducer from 'containers/orderPage/reducer';
+import ShippingPageReducer from 'containers/shippingPage/reducer';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
@@ -29,6 +30,7 @@ export default function createReducer(injectedReducers = {}) {
     login: LoginReducer,
     productPage: ProductPageReducer,
     orderPage: OrderPageReducer,
+    shippingPage: ShippingPageReducer,
     ...injectedReducers,
   });
 

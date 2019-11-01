@@ -6,6 +6,7 @@ import { ILoginState } from 'containers/loginPage/type';
 import { FormState } from 'final-form';
 import { IProductPageState } from 'containers/productPage/type';
 import { IOrderPageState } from 'containers/orderPage/type';
+import { IShippingPageState } from 'containers/shippingPage/type';
 
 export interface LifeStore extends Store {
   injectedReducers: any;
@@ -42,6 +43,7 @@ export interface ApplicationRootState {
   readonly finalForm: IFinalForms;
   readonly productPage: IProductPageState;
   readonly orderPage: IOrderPageState;
+  readonly shippingPage: IShippingPageState;
 }
 
 export interface IAction {

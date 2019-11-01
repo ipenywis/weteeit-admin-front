@@ -30,6 +30,10 @@ export const NavigationItems = {
     name: 'Order',
     path: ROUTES.order,
   },
+  shipping: {
+    name: 'Shipping',
+    path: ROUTES.shipping,
+  },
 };
 
 //Action Types

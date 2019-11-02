@@ -103,6 +103,11 @@ const ControlContainer = styled.div`
   }
 `;
 
+const WarningText = styled.small`
+  font-size: 15px;
+  color: ${theme.default.muted};
+`;
+
 function UpdateItem<T>({
   updateCard,
   item,
@@ -261,7 +266,7 @@ export default function ItemsCard<T extends IBaseItem>(
         />
       )}
       {(!isItemsValid || !isItemListValidAfterFilter) && (
-        <b>{noItemsMessage || 'No Items Available!'}</b>
+        <WarningText>{noItemsMessage || 'No Items Available!'}</WarningText>
       )}
       {isItemsValid &&
         (items as T[]).map((item, idx) => {

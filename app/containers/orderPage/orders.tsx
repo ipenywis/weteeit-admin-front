@@ -77,7 +77,7 @@ class Orders extends React.Component<
       <ItemsCard
         header="Awaiting Orders"
         items={ordersWithInfo}
-        noItemsMessage="No Orders Found"
+        noItemsMessage="No Orders on waiting list"
         loading={isOrdersLoading}
         infoCard={<OrderInfo apolloClient={this.props.apolloClient} />}
         customAlert={

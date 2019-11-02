@@ -115,7 +115,7 @@ class Products extends React.Component<
         header="Available Products"
         items={products}
         loading={isLoading}
-        noItemsMessage="No Products Found"
+        noItemsMessage="No Products Found with selected type"
         dropdownItems={Object.values(ProductTypesValues)}
         onDropdownItemSelect={this.onProductTypeSelect.bind(this)}
         activeDropdownItem={activeProductType.toLocaleLowerCase()}

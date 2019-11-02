@@ -27,8 +27,6 @@ import {
   activateGlobalLoading,
 } from 'containers/App/actions';
 import { GET_PRODUCTS_BY_TYPE } from './queries';
-import { AppToaster } from 'components/toaster';
-import { Intent } from '@blueprintjs/core';
 
 interface IDispatchProps {
   setProducts: (products: IProduct[]) => void;
@@ -65,25 +63,25 @@ class ProductPage extends React.Component<
 
     const productsWithType = await apolloClient
       .query({ query: GET_PRODUCTS_BY_TYPE, variables: queryVariables })
-      .catch(err => {});
-
-    if (!productsWithType) {
-      this.props.disableGlobalLoading();
-      AppToaster.show({
-        message: 'Error, Cannot Load Products at the moment',
-        intent: Intent.DANGER,
+      .catch(err => {
+        this.props.disableGlobalLoading();
       });
-      return false;
+
+    if (
+      productsWithType &&
+      productsWithType.data &&
+      productsWithType.data.productsWithPagination
+    ) {
+      const products = productsWithType.data.productsWithPagination.products;
+      //const pagination = productsWithType.data.productsWithPagination.pagination;
+
+      this.props.setProducts(products);
+    } else {
+      this.props.setProducts([]);
+      this.props.disableGlobalLoading();
     }
 
-    const products = productsWithType.data.productsWithPagination.products;
-    //const pagination = productsWithType.data.productsWithPagination.pagination;
-
-    this.props.setProducts(products);
-
     this.props.clearLoading();
-
-    return true;
   }
 
   render() {

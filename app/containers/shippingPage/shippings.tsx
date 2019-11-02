@@ -6,6 +6,10 @@ import { IShipping } from './type';
 import { connect } from 'react-redux';
 import ItemsCard from 'components/ItemsCard';
 import { ApolloClient } from 'apollo-boost';
+import ShippingForm from './shippingForm';
+import { UPDATE_SHIPPING } from './mutations';
+import { AppToaster } from 'components/toaster';
+import { Intent } from '@blueprintjs/core';
 
 export interface IShippingsProps {
   apolloClient: ApolloClient<any>;
@@ -27,10 +31,48 @@ class Shippings extends React.Component<
     this.props.loadShippings(this.props.apolloClient);
   }
 
-  render() {
-    const { isShippingsLoading, shippings } = this.props;
+  showSuccessMessage() {
+    AppToaster.show({
+      message: 'Shipping Info updated Successfully',
+      intent: Intent.SUCCESS,
+      icon: 'tick',
+    });
+  }
 
-    const shippingsItems: { name: string }[] = shippings.map(s => ({
+  showErrorMessage() {
+    AppToaster.show({
+      message: 'Cannot update shipping info',
+      intent: Intent.DANGER,
+      icon: 'error',
+    });
+  }
+
+  async updateShipping(shipping: IShipping) {
+    const updateResponse = await this.props.apolloClient
+      .mutate({ mutation: UPDATE_SHIPPING, variables: { ...shipping } })
+      .catch(err => {
+        console.log('Error: ', JSON.stringify(err));
+      });
+
+    if (
+      updateResponse &&
+      updateResponse.data &&
+      updateResponse.data.shippingUpdated
+    ) {
+      this.showSuccessMessage();
+      this.props.loadShippings(this.props.apolloClient);
+    } else this.showErrorMessage();
+  }
+
+  render() {
+    const { isShippingsLoading, shippings, apolloClient } = this.props;
+
+    const shippingsItems: {
+      name: string;
+      id?: number;
+      price: number;
+    }[] = shippings.map(s => ({
+      id: s.id,
       name: s.wilaya,
       price: s.price,
     }));
@@ -41,6 +83,18 @@ class Shippings extends React.Component<
         items={shippingsItems}
         loading={isShippingsLoading}
         noItemsMessage="No Shippings to show!"
+        updateCard={
+          <ShippingForm
+            apolloClient={apolloClient}
+            name="updateShipping"
+            header="Update Shipping"
+            elevated
+            submitButtonText="Update"
+            showCloseButton
+            resetOnSuccessfulSubmit={false}
+            onSubmit={this.updateShipping.bind(this)}
+          />
+        }
       />
     );
   }

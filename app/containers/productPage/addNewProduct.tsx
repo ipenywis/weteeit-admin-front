@@ -31,7 +31,6 @@ class AddNewProduct extends React.Component<
         variables: { ...product, type: product.type.toLowerCase() },
       })
       .catch(err => {
-        err.graphQLErrors.map(gqErr => {});
         AppToaster.show({
           message: 'Cannot Save Product, Please Try again later',
           intent: Intent.DANGER,

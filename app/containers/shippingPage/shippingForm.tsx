@@ -13,6 +13,8 @@ import { VerticalWrapper } from 'components/verticalWrapper';
 import { NumericInput } from 'components/numiricInput';
 import { ApolloClient } from 'apollo-boost';
 import { IShipping } from './type';
+import { SHIPPING_EXISTS } from './queries';
+import isEmpty from 'lodash/isEmpty';
 
 export interface IDispatchProps {}
 
@@ -30,7 +32,7 @@ export interface IShippingFormProps {
    */
   currentItem?: IShipping;
 
-  onSubmit: (product: IShipping) => void;
+  onSubmit: (shipping: IShipping) => void;
   onCloseButtonClick?: () => void;
 }
 
@@ -69,6 +71,29 @@ function ShippingForm(
     resetOnSuccessfulSubmit,
   } = props;
 
+  const shippingExists = async (
+    submittedShipping: IShipping,
+    errors: any = {},
+  ) => {
+    //Check if product name already exists (Unique Constraint)
+    const shippingExistsResult = await props.apolloClient
+      .query({
+        query: SHIPPING_EXISTS,
+        variables: { wilaya: submittedShipping.wilaya },
+      })
+      .catch(err => {
+        errors.wilaya = 'Cannot check wilaya validity, please try again later';
+        return errors;
+      });
+
+    if (shippingExistsResult) {
+      if (shippingExistsResult.data.exists) {
+        errors.wilaya = 'Wilaya already exists';
+        return errors;
+      }
+    }
+  };
+
   const onSubmit = async (values, currentItem?: IShipping) => {
     //TODO: Add image storing on nutsCDN
     const submittedShipping: IShipping = {
@@ -81,12 +106,13 @@ function ShippingForm(
     let errors: any = {};
 
     //NOTE: Only check if product exists when name doesnt match currentItem's name (possibly updating product)
-    /*if (currentItem && submittedProduct.wilaya.trim() !== currentItem.name)
-      errors = await productExists(submittedProduct, errors);
-*/
-    props.onSubmit(submittedShipping);
+    if (currentItem && submittedShipping.wilaya.trim() !== currentItem.wilaya) {
+      errors = await shippingExists(submittedShipping, errors);
+    }
 
-    return errors;
+    if (errors && !isEmpty(errors)) return errors;
+
+    props.onSubmit(submittedShipping);
   };
 
   return (
@@ -98,7 +124,16 @@ function ShippingForm(
       onCloseButtonClick={onCloseButtonClick}
     >
       <Form
-        onSubmit={(values: any) => onSubmit(values, currentItem)}
+        onSubmit={(values: any) =>
+          onSubmit(
+            values,
+            currentItem && {
+              id: currentItem.id,
+              wilaya: (currentItem as any).name,
+              price: currentItem.price,
+            },
+          )
+        }
         validate={validateForm}
         resetOnSuccessfulSubmit={resetOnSuccessfulSubmit}
       >
@@ -114,7 +149,7 @@ function ShippingForm(
                 <InputGroup
                   name="wilaya"
                   placeholder="Wilaya Name"
-                  initialValue={currentItem && currentItem.wilaya}
+                  initialValue={currentItem && (currentItem as any).name}
                 />
               </FormGroup>
               <FormGroup

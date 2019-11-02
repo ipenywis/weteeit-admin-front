@@ -11,3 +11,12 @@ export const STORE_SHIPPING = gql`
     }
   }
 `;
+
+export const UPDATE_SHIPPING = gql`
+  mutation UPDATE_SHIPPING($id: Int!, $wilaya: String!, $price: Int!) {
+    shippingUpdated: updateShipping(
+      id: $id
+      updateShippingInput: { wilaya: $wilaya, price: $price }
+    )
+  }
+`;

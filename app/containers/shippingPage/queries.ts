@@ -9,3 +9,9 @@ export const GET_SHIPPINGS = gql`
     }
   }
 `;
+
+export const SHIPPING_EXISTS = gql`
+  query SHIPPING_EXISTS($wilaya: String!) {
+    exists: shippingExists(wilaya: $wilaya)
+  }
+`;

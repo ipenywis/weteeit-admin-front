@@ -33,7 +33,6 @@ export function LanguageProvider(props: ILanguageProviderProps) {
 const mapStateToProps = createSelector(
   makeSelectLocale(),
   locale => {
-    console.log('Language Provider');
     return { locale: locale };
   },
 );

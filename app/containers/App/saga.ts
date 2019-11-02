@@ -29,7 +29,6 @@ function* bootstrap(apolloClient: ApolloClient<any>, action: IAction) {
       yield put(activateGlobalLoading());
       //Load Authenticated Admin metadata
       const authAdmin: IAuthAdmin = yield call(loadAuthAdmin, apolloClient);
-      console.log('Auth Admin: ', authAdmin);
       yield wait();
       yield put(initialized());
       yield put(disableGlobalLoading());

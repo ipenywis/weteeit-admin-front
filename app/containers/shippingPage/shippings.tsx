@@ -10,6 +10,7 @@ import ShippingForm from './shippingForm';
 import { UPDATE_SHIPPING } from './mutations';
 import { AppToaster } from 'components/toaster';
 import { Intent } from '@blueprintjs/core';
+import { DeleteShippingAlert } from './deleteShippingAlert';
 
 export interface IShippingsProps {
   apolloClient: ApolloClient<any>;
@@ -50,9 +51,7 @@ class Shippings extends React.Component<
   async updateShipping(shipping: IShipping) {
     const updateResponse = await this.props.apolloClient
       .mutate({ mutation: UPDATE_SHIPPING, variables: { ...shipping } })
-      .catch(err => {
-        console.log('Error: ', JSON.stringify(err));
-      });
+      .catch(err => {});
 
     if (
       updateResponse &&
@@ -93,6 +92,13 @@ class Shippings extends React.Component<
             showCloseButton
             resetOnSuccessfulSubmit={false}
             onSubmit={this.updateShipping.bind(this)}
+          />
+        }
+        deleteAlert={
+          <DeleteShippingAlert
+            loadShippings={() =>
+              this.props.loadShippings(this.props.apolloClient)
+            }
           />
         }
       />

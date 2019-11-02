@@ -35,8 +35,6 @@ export function DeleteProductAlert(props: IDeleteProductProps) {
         message: `Product ${currentItem.name} Deleted Successfully`,
         intent: Intent.SUCCESS,
       });
-    //Re-Fetch the products
-    console.log('Re-fetching products');
     props.loadProducts();
   };
 

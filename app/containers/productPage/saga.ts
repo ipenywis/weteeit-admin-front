@@ -32,6 +32,5 @@ export function* loadProducts(apolloClient: ApolloClient<any>) {
 }
 
 export default function* rootSaga({ apolloClient }: IProductsProps) {
-  console.log('In Root Saga');
   call(loadProducts, apolloClient);
 }

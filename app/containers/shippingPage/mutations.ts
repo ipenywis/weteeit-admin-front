@@ -20,3 +20,9 @@ export const UPDATE_SHIPPING = gql`
     )
   }
 `;
+
+export const DELETE_SHIPPING = gql`
+  mutation DELETE_SHIPPING($id: Int!) {
+    deleted: deleteShipping(id: $id)
+  }
+`;

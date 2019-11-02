@@ -39,7 +39,6 @@ class Orders extends React.Component<
   IOrdersProps & IOrdersState & IOrdersDispatch
 > {
   componentDidMount() {
-    console.log('Loading Orders');
     this.loadOrders();
   }
 

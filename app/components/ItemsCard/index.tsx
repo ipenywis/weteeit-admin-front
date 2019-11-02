@@ -244,6 +244,10 @@ export default function ItemsCard<T extends IBaseItem>(
     customAlertIntent,
   } = props;
 
+  const isItemListValidAfterFilter = !props.filterItems
+    ? true
+    : (items as T[]).filter(i => props.filterItems && props.filterItems(i))
+        .length > 0;
   const isItemsValid = items && items.length > 0;
   const isDropDownValid = dropdownItems && dropdownItems.length > 0;
 
@@ -256,7 +260,9 @@ export default function ItemsCard<T extends IBaseItem>(
           activeDropdownItem={activeDropdownItem}
         />
       )}
-      {!isItemsValid && <b>{noItemsMessage || 'No Items Available!'}</b>}
+      {(!isItemsValid || !isItemListValidAfterFilter) && (
+        <b>{noItemsMessage || 'No Items Available!'}</b>
+      )}
       {isItemsValid &&
         (items as T[]).map((item, idx) => {
           //Filter Items rendering if defined

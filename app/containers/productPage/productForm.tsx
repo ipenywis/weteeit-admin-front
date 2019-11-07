@@ -20,6 +20,10 @@ import { Switch } from 'components/switch';
 import { NumericInput } from 'components/numiricInput';
 import { ApolloClient } from 'apollo-boost';
 import { PRODUCT_EXISTS } from './queries';
+import Axios from 'axios';
+import { base64URLtoFile } from 'utils/fileReader';
+import isEmpty from 'lodash/isEmpty';
+//import Axios from 'axios';
 
 export interface IDispatchProps {
   setActiveType: (type: ProductTypes) => void;
@@ -114,19 +118,71 @@ function ProductForm(
     }
   };
 
+  /**
+   * Upload Image to Weteeit-Cdn and returns the image file URL
+   */
+  const uploadImage = async (
+    filename: string,
+    base64Url: string,
+    errors?: any,
+  ): Promise<[string, any]> => {
+    Axios.defaults.headers['password'] = "^WE13|37TE$C'D'N_IT/SHOP?$";
+
+    const imageFormData = new FormData();
+    imageFormData.append('key', filename);
+    const imageFile = base64URLtoFile(base64Url, filename);
+    imageFormData.append('imageData', imageFile);
+    const imageStoreResponse = await Axios.post(
+      'http://localhost:5000/image/store',
+      imageFormData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    ).catch(err => {});
+
+    if (
+      !imageStoreResponse ||
+      !imageStoreResponse.data ||
+      !imageStoreResponse.data.URL ||
+      imageStoreResponse.data.URL.trim() === ''
+    ) {
+      errors.image = 'Cannot Upload Image, try again!';
+      return errors;
+    }
+
+    return [imageStoreResponse.data.URL, errors];
+  };
+
   const onSubmit = async (values, currentItem?: IProduct) => {
     //TODO: Add image storing on nutsCDN
+
+    let errors: any = {};
+
+    let storedImageUrl: string = '';
+    if (
+      !currentItem ||
+      (currentItem && currentItem.imageUrl !== values.image)
+    ) {
+      const [imageUrl, uploadErrors] = await uploadImage(
+        values.name,
+        values.image,
+        errors,
+      );
+      storedImageUrl = imageUrl;
+      if (uploadErrors && !isEmpty(uploadErrors)) return uploadErrors;
+    }
+
     const submittedProduct: IProduct = {
       id: currentItem && currentItem.id,
       type: isProductType(productType),
       name: values.name,
       price: values.price,
-      imageUrl: '',
+      imageUrl:
+        storedImageUrl !== '' ? storedImageUrl : (currentItem as any).imageUrl,
       available: values.available,
     };
-
-    //Errors Object
-    let errors: any = {};
 
     //NOTE: Only check if product exists when name doesnt match currentItem's name (possibly updating product)
     if (currentItem && submittedProduct.name.trim() !== currentItem.name)

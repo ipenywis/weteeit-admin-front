@@ -1,6 +1,9 @@
-import ApolloClient, { DefaultOptions } from 'apollo-client';
+import { ApolloClient, DefaultOptions } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-boost';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { setContext } from 'apollo-link-context';
+import * as cookies from 'js-cookie';
+import { AUTH_COOKIE_KEY } from 'common';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -13,8 +16,22 @@ const defaultOptions: DefaultOptions = {
   },
 };
 
+const httpLink = createHttpLink({ uri: 'http://localhost:3000/graphql' });
+
+//Authentication
+const authLink = setContext((_, { headers }) => {
+  const token = cookies.get(AUTH_COOKIE_KEY);
+  console.log('TOKEN: ', token);
+  return {
+    headers: {
+      ...headers,
+      [AUTH_COOKIE_KEY]: token,
+    },
+  };
+});
+
 export const apolloClient = new ApolloClient({
-  link: createHttpLink({ uri: 'http://localhost:3000/graphql' }),
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
   defaultOptions,
 });

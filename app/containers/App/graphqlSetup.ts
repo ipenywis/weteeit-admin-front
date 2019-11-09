@@ -21,7 +21,6 @@ const httpLink = createHttpLink({ uri: 'http://localhost:3000/graphql' });
 //Authentication
 const authLink = setContext((_, { headers }) => {
   const token = cookies.get(AUTH_COOKIE_KEY);
-  console.log('TOKEN: ', token);
   return {
     headers: {
       ...headers,

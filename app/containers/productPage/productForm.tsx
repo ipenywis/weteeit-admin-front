@@ -133,7 +133,7 @@ function ProductForm(
     const imageFile = base64URLtoFile(base64Url, filename);
     imageFormData.append('imageData', imageFile);
     const imageStoreResponse = await Axios.post(
-      'http://localhost:5000/image/store',
+      `${process.env.CDN_URL}/image/store`,
       imageFormData,
       {
         headers: {

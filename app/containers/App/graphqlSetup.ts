@@ -16,7 +16,9 @@ const defaultOptions: DefaultOptions = {
   },
 };
 
-const httpLink = createHttpLink({ uri: 'http://localhost:3000/graphql' });
+console.log('URL: ', process.env.API_URL);
+
+const httpLink = createHttpLink({ uri: `${process.env.API_URL}/graphql` });
 
 //Authentication
 const authLink = setContext((_, { headers }) => {

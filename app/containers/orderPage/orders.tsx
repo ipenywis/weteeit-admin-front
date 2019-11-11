@@ -42,17 +42,21 @@ class Orders extends React.Component<
     this.loadOrders();
   }
 
+  ordersError() {
+    this.props.disableOrdersLoading();
+    AppToaster.show({
+      message: 'Cannot Load Products, Please Try Again',
+      intent: Intent.DANGER,
+    });
+  }
+
   async loadOrders() {
     this.props.enableOrdersLoading();
 
     const ordersResponse = await this.props.apolloClient
       .query({ query: GET_ORDERS })
       .catch(err => {
-        this.props.disableOrdersLoading();
-        AppToaster.show({
-          message: 'Cannot Load Products, Please Try Again',
-          intent: Intent.DANGER,
-        });
+        console.log('Orders Error: ', err);
       });
 
     if (ordersResponse) {
@@ -60,6 +64,8 @@ class Orders extends React.Component<
         this.props.setOrders(ordersResponse.data.orders);
         this.props.disableOrdersLoading();
       }
+    } else {
+      this.ordersError();
     }
   }
 

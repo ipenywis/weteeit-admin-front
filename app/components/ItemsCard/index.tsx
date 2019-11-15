@@ -19,6 +19,7 @@ export interface IItemsCardProps<T extends IBaseItem> {
   noItemsMessage?: string;
   loading?: boolean;
   activeDropdownItem?: string;
+  large?: boolean;
 
   updateCard?: JSX.Element;
   deleteAlert?: JSX.Element;
@@ -234,6 +235,7 @@ export default function ItemsCard<T extends IBaseItem>(
   props: IItemsCardProps<T>,
 ) {
   const {
+    large,
     header,
     items,
     noItemsMessage,
@@ -257,7 +259,7 @@ export default function ItemsCard<T extends IBaseItem>(
   const isDropDownValid = dropdownItems && dropdownItems.length > 0;
 
   return (
-    <FlexCard header={header} interactive loading={loading}>
+    <FlexCard header={header} interactive loading={loading} large={large}>
       {isDropDownValid && (
         <ListDropdown
           dropdownItems={dropdownItems as any}

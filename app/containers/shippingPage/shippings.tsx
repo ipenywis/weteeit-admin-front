@@ -78,6 +78,7 @@ class Shippings extends React.Component<
 
     return (
       <ItemsCard
+        large
         header="Shipping Wilayas"
         items={shippingsItems}
         loading={isShippingsLoading}

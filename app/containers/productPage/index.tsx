@@ -57,8 +57,8 @@ class ProductPage extends React.Component<
 
     const queryVariables = {
       type: type ? type.toLowerCase() : activeProductType.toLowerCase(),
-      pageId: 1,
-      limitPerPage: 10,
+      pageId: null,
+      limitPerPage: null,
     };
 
     const productsWithType = await apolloClient

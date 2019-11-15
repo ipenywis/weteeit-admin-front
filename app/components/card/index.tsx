@@ -20,6 +20,9 @@ interface ICardProps extends IBCardProps {
 }
 
 const CardContainer = styled(BCard)`
+  min-height: ${(props: ICardProps) => props.large && '35em'};
+  max-height: ${(props: ICardProps) => props.large && '50em'};
+  overflow-y: ${(props: ICardProps) => props.large && 'auto'};
   font-family: 'Open Sans', sans-serif;
   margin-right: ${(props: ICardProps) => !props.standalone && '4em'};
   min-width: ${(props: ICardProps) => (props.large ? '20em' : '14em')};

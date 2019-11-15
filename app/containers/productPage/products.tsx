@@ -112,6 +112,7 @@ class Products extends React.Component<
 
     return (
       <ItemsCard
+        large
         header="Available Products"
         items={products}
         loading={isLoading}

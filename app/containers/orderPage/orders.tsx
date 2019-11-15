@@ -81,6 +81,7 @@ class Orders extends React.Component<
 
     return (
       <ItemsCard
+        large
         header="Awaiting Orders"
         items={ordersWithInfo}
         noItemsMessage="No Orders on waiting list"
